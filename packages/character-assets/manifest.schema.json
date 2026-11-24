@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Xiuxian character asset manifest v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "packId": {
+      "const": "xiuxian-character-assets"
+    },
+    "packVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "canvas": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["width", "height"],
+      "additionalProperties": false
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/slot"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["id", "label"],
+        "additionalProperties": false
+      },
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/slot"
+      },
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true
+    },
+    "bodies": {
+      "type": "object",
+      "properties": {
+        "female": {
+          "$ref": "#/$defs/body"
+        },
+        "male": {
+          "$ref": "#/$defs/body"
+        }
+      },
+      "required": ["female", "male"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["schemaVersion", "packId", "packVersion", "canvas", "slots", "layers", "bodies"],
+  "additionalProperties": false,
+  "$defs": {
+    "rect": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["x", "y", "width", "height"],
+      "additionalProperties": false
+    },
+    "slot": {
+      "enum": [
+        "shape",
+        "brows",
+        "eyes",
+        "nose",
+        "mouth",
+        "frontHair",
+        "backHair",
+        "topHair",
+        "outfit"
+      ]
+    },
+    "partId": {
+      "anyOf": [
+        {
+          "const": "none"
+        },
+        {
+          "type": "string",
+          "pattern": "^(0[1-9]|1[0-6])$"
+        }
+      ]
+    },
+    "part": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/partId"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image": {
+              "type": "string",
+              "pattern": "^sprites/(?:[a-z0-9-]+/)+[a-z0-9-]+\\.png$"
+            },
+            "rect": {
+              "$ref": "#/$defs/rect"
+            },
+            "thumbnail": {
+              "type": "string",
+              "pattern": "^thumbnails/(?:[a-z0-9-]+/)+[a-z0-9-]+\\.webp$"
+            },
+            "clip": {
+              "$ref": "#/$defs/rect"
+            },
+            "dyeable": {
+              "const": true
+            }
+          },
+          "required": ["id", "label", "image", "rect"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "none"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image": {
+              "type": "null"
+            }
+          },
+          "required": ["id", "label", "image"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "shape": {
+          "$ref": "#/$defs/partId"
+        },
+        "brows": {
+          "$ref": "#/$defs/partId"
+        },
+        "eyes": {
+          "$ref": "#/$defs/partId"
+        },
+        "nose": {
+          "$ref": "#/$defs/partId"
+        },
+        "mouth": {
+          "$ref": "#/$defs/partId"
+        },
+        "frontHair": {
+          "$ref": "#/$defs/partId"
+        },
+        "backHair": {
+          "$ref": "#/$defs/partId"
+        },
+        "topHair": {
+          "$ref": "#/$defs/partId"
+        },
+        "outfit": {
+          "$ref": "#/$defs/partId"
+        }
+      },
+      "required": [
+        "shape",
+        "brows",
+        "eyes",
+        "nose",
+        "mouth",
+        "frontHair",
+        "backHair",
+        "topHair",
+        "outfit"
+      ],
+      "additionalProperties": false
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "views": {
+          "type": "object",
+          "properties": {
+            "full": {
+              "$ref": "#/$defs/rect"
+            },
+            "portrait": {
+              "$ref": "#/$defs/rect"
+            }
+          },
+          "required": ["full", "portrait"],
+          "additionalProperties": false
+        },
+        "presets": {
+          "type": "object",
+          "properties": {
+            "calm": {
+              "$ref": "#/$defs/selection"
+            },
+            "wandering": {
+              "$ref": "#/$defs/selection"
+            }
+          },
+          "required": ["calm", "wandering"],
+          "additionalProperties": false
+        },
+        "parts": {
+          "type": "object",
+          "properties": {
+            "shape": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "brows": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "eyes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "nose": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "mouth": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "frontHair": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "backHair": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "topHair": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            },
+            "outfit": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/part"
+              },
+              "minItems": 16,
+              "maxItems": 17
+            }
+          },
+          "required": [
+            "shape",
+            "brows",
+            "eyes",
+            "nose",
+            "mouth",
+            "frontHair",
+            "backHair",
+            "topHair",
+            "outfit"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": ["label", "views", "presets", "parts"],
+      "additionalProperties": false
+    }
+  }
+}

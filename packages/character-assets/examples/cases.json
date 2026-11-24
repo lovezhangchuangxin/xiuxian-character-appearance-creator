@@ -1,0 +1,62 @@
+[
+  {
+    "id": "female-mixed",
+    "body": "female",
+    "parts": {
+      "shape": "15",
+      "brows": "06",
+      "eyes": "12",
+      "nose": "04",
+      "mouth": "08",
+      "frontHair": "11",
+      "backHair": "11",
+      "topHair": "08",
+      "outfit": "04"
+    }
+  },
+  {
+    "id": "female-underclothes",
+    "body": "female",
+    "parts": {
+      "shape": "15",
+      "brows": "06",
+      "eyes": "12",
+      "nose": "04",
+      "mouth": "08",
+      "frontHair": "none",
+      "backHair": "none",
+      "topHair": "none",
+      "outfit": "none"
+    }
+  },
+  {
+    "id": "male-mixed",
+    "body": "male",
+    "parts": {
+      "shape": "13",
+      "brows": "16",
+      "eyes": "01",
+      "nose": "04",
+      "mouth": "08",
+      "frontHair": "05",
+      "backHair": "11",
+      "topHair": "13",
+      "outfit": "03"
+    }
+  },
+  {
+    "id": "male-underclothes",
+    "body": "male",
+    "parts": {
+      "shape": "13",
+      "brows": "16",
+      "eyes": "01",
+      "nose": "04",
+      "mouth": "08",
+      "frontHair": "none",
+      "backHair": "none",
+      "topHair": "none",
+      "outfit": "none"
+    }
+  }
+]

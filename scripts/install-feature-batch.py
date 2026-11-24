@@ -8,7 +8,7 @@ from shutil import copy2, rmtree
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG = ROOT / "src/character/numbered-faces.json"
+CATALOG = ROOT / "packages/character-assets/source/numbered-faces.json"
 
 
 def read_batch(folder):

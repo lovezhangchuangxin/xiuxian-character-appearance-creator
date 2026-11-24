@@ -12,7 +12,7 @@ import {
   type Body,
   type Slot,
 } from "./character/catalog";
-import { partPreviewUrl } from "./character/spriteUrls";
+import { spriteUrl } from "./character/spriteUrls";
 import { decodeAppearance, encodeAppearance, savedAppearanceKey } from "./character/appearanceCode";
 
 const appearance = ref(makeAppearance("female"));
@@ -270,13 +270,13 @@ function preset(style: "calm" | "wandering") {
                 :key="part.id"
                 type="button"
                 class="part"
-                :class="{ 'has-preview': part.sprite, 'outfit-part': slot === 'outfit' }"
+                :class="{ 'has-preview': part.image, 'outfit-part': slot === 'outfit' }"
                 :aria-pressed="appearance.parts[slot] === part.id"
                 @click="choosePart(slot, part.id)"
               >
                 <img
-                  v-if="part.sprite"
-                  :src="partPreviewUrl(part.sprite)"
+                  v-if="part.image"
+                  :src="spriteUrl(part.thumbnail ?? part.image)"
                   alt=""
                   draggable="false"
                 />

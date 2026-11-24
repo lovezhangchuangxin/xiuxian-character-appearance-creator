@@ -6,32 +6,28 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "typecheck": "vue-tsc --noEmit",
-    "check:assets": "node scripts/check-assets.mjs",
-    "build": "pnpm typecheck && pnpm check:assets && vite build",
-    "preview": "vite preview",
+    "dev": "pnpm --filter @xiuxian/editor dev",
+    "typecheck": "pnpm --filter @xiuxian/editor typecheck",
+    "check:assets": "pnpm --filter @xiuxian/character-assets build",
+    "build": "pnpm --filter @xiuxian/editor build",
+    "preview": "pnpm --filter @xiuxian/editor preview",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "prepare": "simple-git-hooks"
-  },
-  "dependencies": {
-    "pixi.js": "^8.23.0",
-    "vue": "^3.5.46"
+    "prepare": "simple-git-hooks",
+    "pack:assets": "pnpm check:assets && uv run python scripts/pack-assets.py",
+    "refs:assets": "pnpm check:assets && uv run python scripts/pack-assets.py --refresh-references"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
-    "@vitejs/plugin-vue": "^6.0.11",
+    "ajv": "^8.20.0",
     "lint-staged": "^17.6.2",
     "oxfmt": "^0.79.0",
     "oxlint": "^1.94.0",
     "simple-git-hooks": "^2.14.0",
-    "typescript": "~5.9.3",
-    "vite": "^8.3.8",
-    "vue-tsc": "^3.3.14"
+    "typescript": "~5.9.3"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",

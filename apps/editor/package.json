@@ -1,0 +1,23 @@
+{
+  "name": "@xiuxian/editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @xiuxian/character-assets build && vite",
+    "typecheck": "pnpm --filter @xiuxian/character-assets build && vue-tsc --noEmit",
+    "build": "pnpm typecheck && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@xiuxian/character-assets": "workspace:*",
+    "pixi.js": "^8.23.0",
+    "vue": "^3.5.46"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.11",
+    "typescript": "~5.9.3",
+    "vite": "^8.3.8",
+    "vue-tsc": "^3.3.14"
+  }
+}

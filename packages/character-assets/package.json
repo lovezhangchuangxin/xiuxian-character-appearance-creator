@@ -1,0 +1,11 @@
+{
+  "name": "@xiuxian/character-assets",
+  "version": "0.1.1",
+  "private": true,
+  "exports": {
+    "./manifest.json": "./dist/manifest.json"
+  },
+  "scripts": {
+    "build": "node ../../scripts/check-assets.mjs"
+  }
+}

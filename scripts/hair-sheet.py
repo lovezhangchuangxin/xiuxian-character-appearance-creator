@@ -10,7 +10,7 @@ from PIL import Image
 from scipy.ndimage import find_objects, label, maximum_filter
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG = ROOT / "src/character/numbered-hair.json"
+CATALOG = ROOT / "packages/character-assets/source/numbered-hair.json"
 PARTS = ("front", "back", "top")
 
 

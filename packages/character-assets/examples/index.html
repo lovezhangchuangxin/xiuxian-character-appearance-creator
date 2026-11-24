@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <title>角色素材合成示例</title>
+  <style>
+    body {
+      margin: 1.5rem;
+      font-family: system-ui, sans-serif;
+    }
+    select {
+      margin-inline-start: 0.5rem;
+    }
+    .results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    figure {
+      margin: 0;
+    }
+    canvas,
+    img {
+      display: block;
+      width: min(32rem, 85vw);
+      height: auto;
+      background: #f3f0eb;
+    }
+  </style>
+  <h1>角色素材合成示例</h1>
+  <label>搭配<select id="case"></select></label>
+  <p role="status" id="status"></p>
+  <div class="results">
+    <figure>
+      <figcaption>Canvas 2D</figcaption>
+      <canvas id="result"></canvas>
+    </figure>
+    <figure>
+      <figcaption>参考图</figcaption>
+      <img id="reference" alt="同一外观的合成参考" />
+    </figure>
+  </div>
+  <script type="module">
+    const caseSelect = document.querySelector("#case");
+    const status = document.querySelector("#status");
+    const canvas = document.querySelector("#result");
+    const reference = document.querySelector("#reference");
+    const manifestUrl = new URL("../manifest.json", location.href);
+    let revision = 0;
+
+    async function readJson(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`无法读取 ${url}（${response.status}）`);
+      return response.json();
+    }
+
+    async function loadImage(path) {
+      const image = new Image();
+      image.src = new URL(path, manifestUrl).href;
+      await image.decode();
+      return image;
+    }
+
+    try {
+      const [manifest, cases] = await Promise.all([
+        readJson(manifestUrl),
+        readJson("./appearances.json"),
+      ]);
+      canvas.width = manifest.canvas.width;
+      canvas.height = manifest.canvas.height;
+      const context = canvas.getContext("2d");
+
+      async function draw() {
+        const id = ++revision;
+        status.textContent = "正在加载素材…";
+        try {
+          const appearance = cases[caseSelect.selectedIndex];
+          const { parts } = manifest.bodies[appearance.body];
+          const layers = await Promise.all(
+            manifest.layers.map(async (slot) => {
+              const part = parts[slot].find((choice) => choice.id === appearance.parts[slot]);
+              return part.image ? { ...part, bitmap: await loadImage(part.image) } : null;
+            }),
+          );
+          if (revision !== id) return;
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          for (const layer of layers) {
+            if (!layer) continue;
+            const { x, y, width, height } = layer.rect;
+            context.save();
+            if (layer.clip) {
+              const clip = layer.clip;
+              context.beginPath();
+              context.rect(clip.x, clip.y, clip.width, clip.height);
+              context.clip();
+            }
+            context.drawImage(layer.bitmap, x, y, width, height);
+            context.restore();
+          }
+          reference.src = new URL(appearance.reference, manifestUrl).href;
+          status.textContent = "";
+        } catch (error) {
+          if (revision === id) status.textContent = error.message;
+        }
+      }
+
+      for (const appearance of cases) {
+        caseSelect.add(new Option(appearance.id, appearance.id));
+      }
+      caseSelect.addEventListener("change", draw);
+      await draw();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  </script>
+</html>

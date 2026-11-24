@@ -3,10 +3,11 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { sep } from "node:path";
 import { crc32, inflateSync } from "node:zlib";
 import ts from "typescript";
+import { writeManifest } from "./write-asset-manifest.mjs";
 
 const spriteRoot = new URL("../assets/sprites/", import.meta.url);
 const thumbnailRoot = new URL("../assets/thumbnails/", import.meta.url);
-const catalogUrl = new URL("../src/character/catalog.ts", import.meta.url);
+const catalogUrl = new URL("../packages/character-assets/source/catalog.ts", import.meta.url);
 const { outputText } = ts.transpileModule(readFileSync(catalogUrl, "utf8"), {
   compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
 });
@@ -48,11 +49,14 @@ for (const [body, profile] of Object.entries(bodies)) {
     for (const part of parts) {
       if (!part.sprite) continue;
       register(part.sprite, body);
-      if (
-        slot === "outfit" &&
-        !existsSync(new URL(part.sprite.replace(/\.png$/, ".webp"), thumbnailRoot))
-      ) {
-        errors.push(`Missing outfit thumbnail: ${part.sprite}`);
+      if (slot === "outfit") {
+        const path = part.sprite.replace(/\.png$/, ".webp");
+        const url = new URL(path, thumbnailRoot);
+        if (!existsSync(url)) {
+          errors.push(`Missing outfit thumbnail: thumbnails/${path}`);
+        } else if (!hasWebpContainer(readFileSync(url))) {
+          errors.push(`Invalid or incomplete WebP: thumbnails/${path}`);
+        }
       }
       if (isFaceSlot && !part.headOffset) {
         errors.push(`Missing reference coordinates: ${part.sprite}`);
@@ -84,6 +88,15 @@ function register(path, body, requiredCategory) {
     return;
   }
   registrations.set(path, { body, category });
+}
+
+function hasWebpContainer(buffer) {
+  return (
+    buffer.length >= 20 &&
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP" &&
+    buffer.readUInt32LE(4) === buffer.length - 8
+  );
 }
 
 function pngInfo(buffer) {
@@ -264,5 +277,6 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exitCode = 1;
 } else {
+  writeManifest({ bodies, canvas, headReference, makeAppearance, options, slots, sizes });
   console.log(`Checked ${registrations.size} runtime sprites and both presets for each body type.`);
 }

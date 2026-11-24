@@ -10,14 +10,7 @@ import {
   type Texture,
 } from "pixi.js";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
-import {
-  bodies,
-  canvas,
-  headReference,
-  selectedPart,
-  type Appearance,
-  type Slot,
-} from "../character/catalog";
+import { bodies, layers, selectedPart, type Appearance } from "../character/catalog";
 import { spriteUrl } from "../character/spriteUrls";
 
 const props = defineProps<{ appearance: Appearance; view: "full" | "portrait" }>();
@@ -44,15 +37,10 @@ function layout() {
   const height = Math.max(1, host.value.clientHeight);
   const profile = bodies[renderedBody];
   app.renderer.resize(width, height);
-  const close = props.view === "portrait";
-  const scale = close ? Math.min(width / 350, height / 365) : Math.min(width / 720, height / 1595);
+  const view = profile.views[props.view];
+  const scale = Math.min(width / view.width, height / view.height);
   active.scale.set(scale);
-  active.position.set(
-    width / 2 - profile.center * scale,
-    close
-      ? height / 2 - (profile.crown + 101) * scale
-      : height / 2 - (profile.ground - 753) * scale,
-  );
+  active.position.set(width / 2 - view.x * scale, height / 2 - view.y * scale);
   app.render();
 }
 
@@ -83,19 +71,7 @@ async function render() {
   if (!app || disposed) return;
   const id = ++revision;
   const appearance = props.appearance;
-  const profile = bodies[appearance.body];
-  const slotOrder: Slot[] = [
-    "backHair",
-    "outfit",
-    "shape",
-    "brows",
-    "eyes",
-    "nose",
-    "mouth",
-    "frontHair",
-    "topHair",
-  ];
-  const parts = Object.fromEntries(slotOrder.map((slot) => [slot, selectedPart(appearance, slot)]));
+  const parts = layers.map((slot) => ({ slot, part: selectedPart(appearance, slot) }));
   const changingBody = appearance.body !== renderedBody;
   if (active) {
     active.visible = !changingBody;
@@ -105,55 +81,35 @@ async function render() {
   error.value = "";
 
   try {
-    const outfit = parts.outfit;
-    const [base, ...images] = await Promise.all([
-      outfit.sprite ? undefined : texture(profile.sprite),
-      ...slotOrder.map((slot) => (parts[slot].sprite ? texture(parts[slot].sprite) : undefined)),
-    ]);
+    const images = await Promise.all(
+      parts.map(({ part }) => (part.image ? texture(part.image) : undefined)),
+    );
     if (!app || disposed || revision !== id) return;
     const next = new Container();
-    const dye = outfit.dyeable && appearance.dye ? dyeFilter(appearance.dye) : undefined;
+    let dye: Filter | undefined;
 
-    function draw(slot: Slot, coordinate = 0, centered = true) {
-      const tex = images[slotOrder.indexOf(slot)];
-      if (!tex) return;
-      const part = parts[slot];
+    for (const [index, { slot, part }] of parts.entries()) {
+      const tex = images[index];
+      if (!tex || !part.rect) continue;
+
       const sprite = new Sprite(tex);
-      if (part.headOffset) {
-        const [x, y] = part.headOffset;
-        sprite.scale.set(headReference.scale);
-        sprite.position.set(
-          profile.headOrigin[0] + x * headReference.scale,
-          profile.headOrigin[1] + y * headReference.scale,
-        );
-        next.addChild(sprite);
-        return;
-      }
-      if (part.width) sprite.width = part.width;
-      if (part.height) sprite.height = part.height;
-      if (centered) {
-        sprite.anchor.set(0.5, slot === "backHair" || slot === "frontHair" ? 0 : 0.5);
-        sprite.position.set(profile.center + (part.dx ?? 0), coordinate + (part.dy ?? 0));
-      }
-      if (slot === "outfit" && dye) sprite.filters = [dye];
+      const { x, y, width, height } = part.rect;
+      sprite.position.set(x, y);
+      sprite.width = width;
+      sprite.height = height;
       next.addChild(sprite);
-    }
 
-    draw("backHair", profile.crown);
-    draw("shape");
-    if (base) {
-      const body = new Sprite(base);
-      const mask = new Graphics()
-        .rect(0, profile.neck, canvas.width, canvas.height - profile.neck)
-        .fill(0xffffff);
-      next.addChild(body, mask);
-      body.mask = mask;
+      if (part.clip) {
+        const clip = part.clip;
+        const mask = new Graphics().rect(clip.x, clip.y, clip.width, clip.height).fill(0xffffff);
+        next.addChild(mask);
+        sprite.mask = mask;
+      }
+      if (slot === "outfit" && part.dyeable && appearance.dye) {
+        dye = dyeFilter(appearance.dye);
+        sprite.filters = [dye];
+      }
     }
-    draw("outfit", 0, false);
-
-    draw("topHair", profile.crown);
-    for (const slot of ["brows", "eyes", "nose", "mouth"] as const) draw(slot);
-    draw("frontHair", profile.crown);
 
     disposeActive?.();
     active = next;
