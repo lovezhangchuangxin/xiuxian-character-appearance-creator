@@ -45,6 +45,9 @@ let revision = 0;
 let frame = 0;
 let disposed = false;
 const pointers = new Map<number, { x: number; y: number }>();
+const narrowLayout = window.matchMedia("(max-width: 660px)");
+let singlePointerStart: { x: number; y: number } | undefined;
+let horizontalTouchPan = false;
 let pinchSpan = 0;
 
 const MIN_ZOOM = 0.5;
@@ -116,6 +119,7 @@ function zoomStep(direction: 1 | -1) {
 }
 
 function onWheel(event: WheelEvent) {
+  if (narrowLayout.matches) return;
   event.preventDefault();
   const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
   zoomAt(event.clientX, event.clientY, Math.exp(-delta * 0.0015));
@@ -133,7 +137,12 @@ function span() {
 
 function onPointerDown(event: PointerEvent) {
   if (!host.value) return;
-  pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  const position = { x: event.clientX, y: event.clientY };
+  pointers.set(event.pointerId, position);
+  if (pointers.size === 1) {
+    singlePointerStart = position;
+    horizontalTouchPan = false;
+  }
   try {
     host.value.setPointerCapture(event.pointerId);
   } catch {
@@ -148,8 +157,17 @@ function onPointerMove(event: PointerEvent) {
   const before = pointers.size === 2 ? midpoint() : undefined;
   pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
   if (pointers.size === 1) {
+    if (event.pointerType === "touch" && narrowLayout.matches) {
+      if (!horizontalTouchPan && singlePointerStart) {
+        const dx = Math.abs(event.clientX - singlePointerStart.x);
+        const dy = Math.abs(event.clientY - singlePointerStart.y);
+        horizontalTouchPan = dx > Math.max(6, dy);
+      }
+      if (!horizontalTouchPan) return;
+    } else {
+      user.y += event.clientY - previous.y;
+    }
     user.x += event.clientX - previous.x;
-    user.y += event.clientY - previous.y;
     applyTransform();
     scheduleRender();
     return;
@@ -167,8 +185,10 @@ function onPointerMove(event: PointerEvent) {
 }
 
 function onPointerUp(event: PointerEvent) {
-  pointers.delete(event.pointerId);
-  if (pointers.size < 2) pinchSpan = 0;
+  if (!pointers.delete(event.pointerId)) return;
+  pinchSpan = pointers.size === 2 ? span() : 0;
+  singlePointerStart = pointers.size === 1 ? pointers.values().next().value : undefined;
+  horizontalTouchPan = false;
 }
 
 function dyeFilter(hex: string) {
@@ -292,6 +312,7 @@ onMounted(async () => {
   target.addEventListener("pointermove", onPointerMove);
   target.addEventListener("pointerup", onPointerUp);
   target.addEventListener("pointercancel", onPointerUp);
+  target.addEventListener("lostpointercapture", onPointerUp);
   target.addEventListener("dblclick", resetView);
   const next = new Application();
   try {
