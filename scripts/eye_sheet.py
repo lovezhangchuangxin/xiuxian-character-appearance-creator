@@ -30,9 +30,13 @@ def clean_alpha(image):
 
 
 def background_report(edited, carrier):
-    silhouette = carrier.getchannel("A").point(lambda alpha: 255 if alpha > ALPHA_NOISE_FLOOR else 0)
+    silhouette = carrier.getchannel("A").point(
+        lambda alpha: 255 if alpha > ALPHA_NOISE_FLOOR else 0
+    )
     # Exclude the antialiased boundary and allow a small amount of registration drift.
-    silhouette = silhouette.resize(edited.size, Image.Resampling.NEAREST).filter(ImageFilter.MaxFilter(15))
+    silhouette = silhouette.resize(edited.size, Image.Resampling.NEAREST).filter(
+        ImageFilter.MaxFilter(15)
+    )
     pixels = np.asarray(edited.getchannel("A"))[np.asarray(silhouette) == 0]
     return {
         "sampled_pixels": int(pixels.size),
@@ -48,7 +52,9 @@ def prepare(args):
     if blank.size != CELL_SIZE or complete.size != CELL_SIZE:
         raise ValueError("Both head references must use the aligned 512 × 620 crop.")
     width, height = complete.size
-    mask = eye_mask(complete.size, EYE_WINDOWS[args.body]).filter(ImageFilter.GaussianBlur(2))
+    mask = eye_mask(complete.size, EYE_WINDOWS[args.body]).filter(
+        ImageFilter.GaussianBlur(2)
+    )
     tile = clean_alpha(Image.composite(blank, complete, mask))
     sheet = Image.new("RGBA", (width * args.columns, height * args.rows))
     for row in range(args.rows):
@@ -62,7 +68,9 @@ def luma(image):
     rgba = np.asarray(image, dtype=np.float32) / 255
     alpha = rgba[..., 3]
     rgb = rgba[..., :3]
-    return (rgb[..., 0] * 0.2126 + rgb[..., 1] * 0.7152 + rgb[..., 2] * 0.0722) * alpha + 0.9 * (1 - alpha)
+    return (
+        rgb[..., 0] * 0.2126 + rgb[..., 1] * 0.7152 + rgb[..., 2] * 0.0722
+    ) * alpha + 0.9 * (1 - alpha)
 
 
 def align_tile(original, edited, windows):
@@ -76,7 +84,7 @@ def align_tile(original, edited, windows):
     stable[:12] = stable[-24:] = False
     stable[:, :10] = stable[:, -10:] = False
     for left, top, right, bottom in windows:
-        stable[top - 8:bottom + 8, left - 6:right + 6] = False
+        stable[top - 8 : bottom + 8, left - 6 : right + 6] = False
     y, x = np.nonzero(stable)
     if not len(x):
         raise ValueError("No stable head edges available for registration.")
@@ -87,14 +95,23 @@ def align_tile(original, edited, windows):
 
     def score(transform):
         sx, sy, dx, dy = transform
-        ref_x = np.clip(np.rint((x - x_mid) * sx + x_mid + dx).astype(int), 0, width - 1)
-        ref_y = np.clip(np.rint((y - y_mid) * sy + y_mid + dy).astype(int), 0, height - 1)
+        ref_x = np.clip(
+            np.rint((x - x_mid) * sx + x_mid + dx).astype(int), 0, width - 1
+        )
+        ref_y = np.clip(
+            np.rint((y - y_mid) * sy + y_mid + dy).astype(int), 0, height - 1
+        )
         return np.minimum(abs(target[ref_y, ref_x] - expected), 0.26).mean()
 
     params = [1.0, 1.0, 0.0, 0.0]
     before = score(params)
     for scale_step, shift_step in ((0.06, 14), (0.03, 7), (0.012, 3), (0.004, 1)):
-        for axis, step in ((2, shift_step), (3, shift_step), (0, scale_step), (1, scale_step)):
+        for axis, step in (
+            (2, shift_step),
+            (3, shift_step),
+            (0, scale_step),
+            (1, scale_step),
+        ):
             candidate = params.copy()
             choices = []
             for offset in range(-2, 3):
@@ -104,7 +121,9 @@ def align_tile(original, edited, windows):
 
     sx, sy, dx, dy = params
     matrix = (sx, 0, x_mid * (1 - sx) + dx, 0, sy, y_mid * (1 - sy) + dy)
-    aligned = edited.transform(original.size, Image.Transform.AFFINE, matrix, Image.Resampling.BICUBIC)
+    aligned = edited.transform(
+        original.size, Image.Transform.AFFINE, matrix, Image.Resampling.BICUBIC
+    )
     return aligned, {
         "scale": [round(sx, 4), round(sy, 4)],
         "shift": [round(dx, 2), round(dy, 2)],
@@ -114,7 +133,7 @@ def align_tile(original, edited, windows):
 
 
 def largest_component(pixels):
-    available = set(zip(*np.nonzero(pixels)))
+    available = set(zip(*np.nonzero(pixels), strict=True))
     largest = []
     while available:
         todo = [available.pop()]
@@ -130,7 +149,7 @@ def largest_component(pixels):
             largest = component
     result = np.zeros(pixels.shape, dtype=np.uint8)
     if largest:
-        result[tuple(zip(*largest))] = 255
+        result[tuple(zip(*largest, strict=True))] = 255
     return result
 
 
@@ -142,7 +161,11 @@ def eye_support(delta, art, windows):
         if not np.any(ink):
             raise ValueError("No eye ink detected in one of the eye windows.")
         support[top:bottom, left:right] = ink
-    expanded = Image.fromarray(support).filter(ImageFilter.MaxFilter(17)).filter(ImageFilter.GaussianBlur(1.5))
+    expanded = (
+        Image.fromarray(support)
+        .filter(ImageFilter.MaxFilter(17))
+        .filter(ImageFilter.GaussianBlur(1.5))
+    )
     return np.asarray(expanded, dtype=np.float32) / 255
 
 
@@ -165,27 +188,37 @@ def extract_layer(original, edited, windows):
     bounds = output.getbbox()
     if bounds is None:
         raise ValueError("Eye windows contain no extractable features.")
-    return output.crop(bounds), bounds, {
-        "skin_noise_p95": round(float(skin_noise * 255), 2),
-        "opacity_threshold": round(low * 255, 2),
-        "window_edge_pixels": int(sum(
-            np.count_nonzero(alpha8[top:top + 3, left:right] > 24)
-            + np.count_nonzero(alpha8[bottom - 3:bottom, left:right] > 24)
-            + np.count_nonzero(alpha8[top:bottom, left:left + 3] > 24)
-            + np.count_nonzero(alpha8[top:bottom, right - 3:right] > 24)
-            for left, top, right, bottom in windows
-        )),
-    }
+    return (
+        output.crop(bounds),
+        bounds,
+        {
+            "skin_noise_p95": round(float(skin_noise * 255), 2),
+            "opacity_threshold": round(low * 255, 2),
+            "window_edge_pixels": int(
+                sum(
+                    np.count_nonzero(alpha8[top : top + 3, left:right] > 24)
+                    + np.count_nonzero(alpha8[bottom - 3 : bottom, left:right] > 24)
+                    + np.count_nonzero(alpha8[top:bottom, left : left + 3] > 24)
+                    + np.count_nonzero(alpha8[top:bottom, right - 3 : right] > 24)
+                    for left, top, right, bottom in windows
+                )
+            ),
+        },
+    )
 
 
 def delta_layer(base, delta, support):
     """Recover a foreground color and alpha that reconstruct the color delta."""
-    required_alpha = np.maximum(delta / (1 - base + 1e-6), -delta / (base + 1e-6)).max(axis=2)
+    required_alpha = np.maximum(delta / (1 - base + 1e-6), -delta / (base + 1e-6)).max(
+        axis=2
+    )
     alpha = np.minimum(1, required_alpha * 1.17)
     color = np.clip(base + delta / np.maximum(alpha[..., None], 1e-6), 0, 1)
     alpha8 = np.rint(alpha * support * 255).astype(np.uint8)
     rgba = np.empty((*alpha.shape, 4), dtype=np.uint8)
-    rgba[..., :3] = np.where(alpha8[..., None] > 0, np.rint(color * 255), 0).astype(np.uint8)
+    rgba[..., :3] = np.where(alpha8[..., None] > 0, np.rint(color * 255), 0).astype(
+        np.uint8
+    )
     rgba[..., 3] = alpha8
     return Image.fromarray(rgba, "RGBA")
 
@@ -215,12 +248,14 @@ def extract(args):
             x, y = col * width, row * height
             original = carrier.crop((x, y, x + width, y + height))
             silhouette = original.getchannel("A")
-            edited_cell = edited.crop((
-                round(col * edited.width / args.columns),
-                round(row * edited.height / args.rows),
-                round((col + 1) * edited.width / args.columns),
-                round((row + 1) * edited.height / args.rows),
-            )).resize((width, height), Image.Resampling.LANCZOS)
+            edited_cell = edited.crop(
+                (
+                    round(col * edited.width / args.columns),
+                    round(row * edited.height / args.rows),
+                    round((col + 1) * edited.width / args.columns),
+                    round((row + 1) * edited.height / args.rows),
+                )
+            ).resize((width, height), Image.Resampling.LANCZOS)
             try:
                 aligned, registration = align_tile(original, edited_cell, windows)
                 layer, bounds, quality = extract_layer(original, aligned, windows)
@@ -230,19 +265,23 @@ def extract(args):
                 name = f"eyes-{row * args.columns + col + 1:02}.png"
                 layer.save(args.output / name)
                 original.alpha_composite(layer, bounds[:2])
-                metadata["pairs"].append({
-                    "file": name,
-                    "cell": [col, row],
-                    "offset": list(bounds[:2]),
-                    "size": list(layer.size),
-                    "registration": registration,
-                    "quality": quality,
-                })
+                metadata["pairs"].append(
+                    {
+                        "file": name,
+                        "cell": [col, row],
+                        "offset": list(bounds[:2]),
+                        "size": list(layer.size),
+                        "registration": registration,
+                        "quality": quality,
+                    }
+                )
             original.putalpha(silhouette)
             output.paste(original, (x, y))
     output = clean_alpha(output)
     metadata["reassembled_background_alpha"] = background_report(output, carrier)
-    (args.output / "placements.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    (args.output / "placements.json").write_text(
+        json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
+    )
     output.save(args.output / "reassembled-transparent.png")
     preview = Image.new("RGBA", output.size, "#eee8dc")
     preview.alpha_composite(output)

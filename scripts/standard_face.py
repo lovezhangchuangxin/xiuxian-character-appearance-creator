@@ -5,9 +5,8 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
-
 from eye_sheet import CELL_SIZE, EYE_WINDOWS, delta_layer, extract_layer, eye_mask
+from PIL import Image, ImageDraw, ImageFilter
 
 FEATURE_REGIONS = {
     "male": {
@@ -33,7 +32,11 @@ def region_mask(rectangles):
 
 def separate(body, blank, complete):
     windows = EYE_WINDOWS[body]
-    eye_base = Image.composite(blank, complete, eye_mask(CELL_SIZE, windows).filter(ImageFilter.GaussianBlur(2)))
+    eye_base = Image.composite(
+        blank,
+        complete,
+        eye_mask(CELL_SIZE, windows).filter(ImageFilter.GaussianBlur(2)),
+    )
     eye, bounds, _ = extract_layer(eye_base, complete, windows)
     parts = {"eyes": (eye, bounds[:2])}
     base = np.asarray(blank, dtype=np.float32)[..., :3] / 255
@@ -74,7 +77,9 @@ def main():
         layer.save(target)
         restored.alpha_composite(layer, offset)
         placements[slot] = {"offset": offset, "size": layer.size}
-    (args.output / "placements.json").write_text(json.dumps(placements, indent=2) + "\n", encoding="utf-8")
+    (args.output / "placements.json").write_text(
+        json.dumps(placements, indent=2) + "\n", encoding="utf-8"
+    )
 
     preview = Image.new("RGBA", (CELL_SIZE[0] * 2, CELL_SIZE[1]), "#eee8dc")
     preview.alpha_composite(complete)

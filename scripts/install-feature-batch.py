@@ -14,11 +14,18 @@ CATALOG = ROOT / "src/character/numbered-faces.json"
 def read_batch(folder):
     report = json.loads((folder / "placements.json").read_text(encoding="utf-8"))
     body, part = report["body"], report["part"]
-    if body not in ("male", "female") or part not in ("brows", "eyes", "noses", "mouths"):
+    if body not in ("male", "female") or part not in (
+        "brows",
+        "eyes",
+        "noses",
+        "mouths",
+    ):
         raise ValueError(f"Unsupported batch: {body}/{part}")
 
     variants = sorted(report["variants"], key=lambda entry: entry["index"])
-    if report["grid"] != 4 or [variant["index"] for variant in variants] != list(range(1, 17)):
+    if report["grid"] != 4 or [variant["index"] for variant in variants] != list(
+        range(1, 17)
+    ):
         raise ValueError(f"The batch must contain all 16 cells: {folder}")
     if report["reassembled_background_alpha"]["max_alpha"] != 0:
         raise ValueError(f"Nontransparent background in {folder}")
@@ -33,10 +40,20 @@ def read_batch(folder):
         source = folder / filename
         x, y = variant["offset"]
         with Image.open(source) as sprite:
-            if sprite.format != "PNG" or sprite.mode != "RGBA" or sprite.getchannel("A").getextrema()[1] == 0:
+            if (
+                sprite.format != "PNG"
+                or sprite.mode != "RGBA"
+                or sprite.getchannel("A").getextrema()[1] == 0
+            ):
                 raise ValueError(f"Expected a nonempty RGBA PNG: {source}")
-            if (type(x) is not int or type(y) is not int or x < 0 or y < 0 or
-                    x + sprite.width > 512 or y + sprite.height > 620):
+            if (
+                type(x) is not int
+                or type(y) is not int
+                or x < 0
+                or y < 0
+                or x + sprite.width > 512
+                or y + sprite.height > 620
+            ):
                 raise ValueError(f"Invalid head placement: {source}")
         files.append((source, destination / f"{variant['index']:02}.png"))
         offsets.append([x, y])
@@ -48,18 +65,24 @@ def install_batches(folders):
     try:
         work.mkdir()
     except FileExistsError as error:
-        raise RuntimeError(f"A facial batch installation is active or needs recovery: {work}") from error
+        raise RuntimeError(
+            f"A facial batch installation is active or needs recovery: {work}"
+        ) from error
 
     recovery_required = False
     try:
-        catalog = json.loads(CATALOG.read_text(encoding="utf-8")) if CATALOG.is_file() else {}
+        catalog = (
+            json.loads(CATALOG.read_text(encoding="utf-8")) if CATALOG.is_file() else {}
+        )
         files = {}
         for folder in folders:
             body, part, sprites, offsets = read_batch(folder)
             files.update((target, source) for source, target in sprites)
             catalog.setdefault(body, {})[part] = offsets
         manifest = work / "catalog.json"
-        manifest.write_text(json.dumps(catalog, separators=(",", ":")) + "\n", encoding="utf-8")
+        manifest.write_text(
+            json.dumps(catalog, separators=(",", ":")) + "\n", encoding="utf-8"
+        )
         files[CATALOG] = manifest
 
         staged = []
@@ -88,7 +111,9 @@ def install_batches(folders):
                         backup.replace(target)
             except BaseException as error:
                 recovery_required = True
-                raise RuntimeError(f"Batch rollback failed. Remaining backups are in {work}") from error
+                raise RuntimeError(
+                    f"Batch rollback failed. Remaining backups are in {work}"
+                ) from error
             raise
     finally:
         if not recovery_required:

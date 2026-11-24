@@ -5,9 +5,8 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
-
 from eye_sheet import CELL_SIZE, align_tile, clean_alpha
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 NECK_CROP = {"male": 559, "female": 547}
@@ -64,7 +63,8 @@ def extend_neck(shape, neck):
         flare = float(ramp(distance, 15, 135))
         scale = 1 + 0.65 * flare
         scanline = source.transform(
-            (width, 1), Image.Transform.AFFINE,
+            (width, 1),
+            Image.Transform.AFFINE,
             (1 / scale, 0, center * (1 - 1 / scale), 0, 1, 0),
             Image.Resampling.BICUBIC,
         )
@@ -72,7 +72,9 @@ def extend_neck(shape, neck):
         # Let the jaw shadow ease into the lighter skin under the collar.
         inner = 1 - ramp(np.abs(np.arange(width) - center), 45 * scale, 95 * scale)
         weight = (inner * float(ramp(distance, 0, 115)))[None, :, None]
-        pixels[..., :3] = (pixels[..., :3] * (1 - weight) + chest_light * weight).round()
+        pixels[..., :3] = (
+            pixels[..., :3] * (1 - weight) + chest_light * weight
+        ).round()
         # Fade away below even the deepest opening.
         opacity = 1 - float(ramp(y, SHAPE_HEIGHT - 42, SHAPE_HEIGHT - 1))
         pixels[..., 3] = (pixels[..., 3] * opacity).round()
@@ -86,7 +88,9 @@ def main():
     parser.add_argument("--edited", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    original = Image.open(ROOT / "assets/references/masters/heads" / args.body / "blank.png").convert("RGBA")
+    original = Image.open(
+        ROOT / "assets/references/masters/heads" / args.body / "blank.png"
+    ).convert("RGBA")
     generated = Image.open(args.edited).convert("RGBA")
     neck = NECK_CROP[args.body]
     w, h = CELL_SIZE
@@ -97,10 +101,15 @@ def main():
     report = []
     for index in range(16):
         row, col = divmod(index, 4)
-        bounds = tuple(round(a * dimension / 4) for a, dimension in (
-            (col, generated.width), (row, generated.height),
-            (col + 1, generated.width), (row + 1, generated.height),
-        ))
+        bounds = tuple(
+            round(a * dimension / 4)
+            for a, dimension in (
+                (col, generated.width),
+                (row, generated.height),
+                (col + 1, generated.width),
+                (row + 1, generated.height),
+            )
+        )
         edited = generated.crop(bounds).resize((w, h), Image.Resampling.LANCZOS)
         if np.count_nonzero(np.asarray(edited.getchannel("A")) > 127) < 60_000:
             raise ValueError(f"Cell {index + 1} is missing its head silhouette.")
@@ -109,9 +118,17 @@ def main():
         name = f"{index + 1:02d}.png"
         shape.save(destination / name)
         review.alpha_composite(shape, (col * w, row * SHAPE_HEIGHT))
-        report.append({"id": name.removesuffix(".png"), "offset": [0, 0], "registration": transform})
+        report.append(
+            {
+                "id": name.removesuffix(".png"),
+                "offset": [0, 0],
+                "registration": transform,
+            }
+        )
     (args.output / "placements.json").write_text(json.dumps(report, indent=2) + "\n")
-    review.convert("RGB").resize((w * 2, SHAPE_HEIGHT * 2), Image.Resampling.LANCZOS).save(args.output / "reassembled.png")
+    review.convert("RGB").resize(
+        (w * 2, SHAPE_HEIGHT * 2), Image.Resampling.LANCZOS
+    ).save(args.output / "reassembled.png")
 
 
 if __name__ == "__main__":

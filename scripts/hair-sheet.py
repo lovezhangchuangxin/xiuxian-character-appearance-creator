@@ -5,10 +5,9 @@ import json
 from pathlib import Path
 
 import numpy as np
+from eye_sheet import clean_alpha
 from PIL import Image
 from scipy.ndimage import find_objects, label, maximum_filter
-
-from eye_sheet import clean_alpha
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "src/character/numbered-hair.json"
@@ -49,30 +48,38 @@ def placement(piece, index, body, part):
         width = (186 if body == "male" else 191) + (2, 0, -3, 3)[row]
         height = round(np.clip(width / aspect, 125, 212))
         alpha = np.asarray(piece.getchannel("A"))
-        mid = alpha[:, round(piece.width * .39):round(piece.width * .61)] > 110
-        center_depth = np.flatnonzero(mid.mean(axis=1) > .2)
+        mid = alpha[:, round(piece.width * 0.39) : round(piece.width * 0.61)] > 110
+        center_depth = np.flatnonzero(mid.mean(axis=1) > 0.2)
         if center_depth.size:
             usable_height = 102 * piece.height / max(center_depth[-1], 1)
             height = min(height, round(usable_height))
         return [width, height, 0, -26]
 
     if part == "back":
-        heights = ((426, 448, 405, 445), (200, 230, 251, 171),
-                   (420, 360, 395, 338), (397, 408, 415, 435))
+        heights = (
+            (426, 448, 405, 445),
+            (200, 230, 251, 171),
+            (420, 360, 395, 338),
+            (397, 408, 415, 435),
+        )
         height = heights[row][col] + (14 if body == "female" else 0)
         width = round(np.clip(height * aspect, 145, 255))
         alpha = np.asarray(piece.getchannel("A"))
-        cap = np.where(alpha[:max(1, round(piece.height * .18))] > 96)[1]
-        dx = round(np.clip(width * (.5 - np.mean(cap) / piece.width), -42, 42)) if cap.size else 0
+        cap = np.where(alpha[: max(1, round(piece.height * 0.18))] > 96)[1]
+        dx = (
+            round(np.clip(width * (0.5 - np.mean(cap) / piece.width), -42, 42))
+            if cap.size
+            else 0
+        )
         return [width, height, dx, 7]
 
     width = (71, 67, 76, 72)[row] + (0, 4, -3, 5)[col]
     height = round(np.clip(width / aspect, 28, 57))
     alpha = np.asarray(piece.getchannel("A"))
-    center = alpha[:, round(piece.width * .35):round(piece.width * .65)] > 110
-    connected = np.flatnonzero(center.mean(axis=1) > .25)
+    center = alpha[:, round(piece.width * 0.35) : round(piece.width * 0.65)] > 110
+    connected = np.flatnonzero(center.mean(axis=1) > 0.25)
     join = connected[-1] / piece.height if connected.size else 1
-    return [width, height, 0, round(-12 + (.5 - join) * height)]
+    return [width, height, 0, round(-12 + (0.5 - join) * height)]
 
 
 def main():
@@ -86,15 +93,22 @@ def main():
             raise ValueError(f"Expected transparent source sheet: {args.sheet}")
         pieces = list(pieces_in_sheet(image))
 
-    transforms = [placement(piece, index, args.body, args.part) for index, piece in enumerate(pieces)]
+    transforms = [
+        placement(piece, index, args.body, args.part)
+        for index, piece in enumerate(pieces)
+    ]
     destination = ROOT / "assets/sprites/hair" / args.body / args.part
     destination.mkdir(parents=True, exist_ok=True)
     for index, piece in enumerate(pieces, start=1):
         piece.save(destination / f"{index:02d}.png")
 
-    catalog = json.loads(CATALOG.read_text(encoding="utf-8")) if CATALOG.is_file() else {}
+    catalog = (
+        json.loads(CATALOG.read_text(encoding="utf-8")) if CATALOG.is_file() else {}
+    )
     catalog.setdefault(args.body, {})[args.part] = transforms
-    CATALOG.write_text(json.dumps(catalog, separators=(",", ":")) + "\n", encoding="utf-8")
+    CATALOG.write_text(
+        json.dumps(catalog, separators=(",", ":")) + "\n", encoding="utf-8"
+    )
 
 
 if __name__ == "__main__":
