@@ -15,7 +15,7 @@ art_work="$(mktemp -d)"
 | ------------------------------------------------------ | ---------------------------------------------------- | --------------------------------------------------------------------------------- |
 | [feature_sheet.py](./feature_sheet.py)                 | 制作五官留空载图，从编辑后的网格提取透明裁片并回贴   | `--output`                                                                        |
 | [install-feature-batch.py](./install-feature-batch.py) | 校验并按原稿顺序安装一组或多组完整 4 × 4 五官裁片    | `assets/sprites/faces/` 和 `packages/character-assets/source/numbered-faces.json` |
-| [shape-sheet.py](./shape-sheet.py)                     | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部     | 正式脸型 PNG，以及 `--output` 中的定位和验收图                                    |
+| [shape-sheet.py](./shape-sheet.py)                     | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部     | 正式脸型 PNG、脸型缩略图，以及 `--output` 中的定位和验收图                        |
 | [hair-sheet.py](./hair-sheet.py)                       | 按透明轮廓拆成 16 张前发、后发或发髻，计算摆放参数   | `assets/sprites/hair/` 和 `packages/character-assets/source/numbered-hair.json`   |
 | [outfit-sheet.py](./outfit-sheet.py)                   | 合并四张服装原稿，匹配领口和袖口，生成套装与缩略图   | 正式服装 PNG、WebP 缩略图，以及 `--output` 中的试装和定位数据                     |
 | [standard_face.py](./standard_face.py)                 | 从同体型完整脸和空脸拆出一张标准脸的四个部件         | `--output` 中的各部件、坐标和对照图                                               |

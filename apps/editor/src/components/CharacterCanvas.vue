@@ -21,7 +21,10 @@ import {
 } from "../character/catalog";
 import { spriteUrl } from "../character/spriteUrls";
 
-const props = defineProps<{ appearance: Appearance }>();
+const props = defineProps<{
+  appearance: Appearance;
+  view: keyof (typeof bodies)[Body]["views"];
+}>();
 const host = ref<HTMLDivElement>();
 const error = ref("");
 const busy = ref(true);
@@ -32,7 +35,7 @@ let world: Container | undefined;
 let character: Container | undefined;
 const slotLayers = new Map<Slot, Container>();
 const renderedParts = new Map<Slot, string>();
-const slotFilters = new Map<Slot, Filter | undefined>();
+const slotFilters = new Map<Slot, Filter>();
 let renderedBody: Body | undefined;
 let renderedDye: string | null = null;
 let fit = { scale: 1, x: 0, y: 0 };
@@ -76,7 +79,7 @@ function layout() {
     app.renderer.resize(width, height);
   }
   if (renderedBody) {
-    const view = bodies[renderedBody].views.full;
+    const view = bodies[renderedBody].views[props.view];
     const scale = Math.min(width / view.width, height / view.height);
     fit = { scale, x: width / 2 - view.x * scale, y: height / 2 - view.y * scale };
     applyTransform();
@@ -205,12 +208,14 @@ function rebuildCharacter() {
   world?.addChild(character);
 }
 
-function buildSlot(slot: Slot, part: Part, tex: Texture, dye: string | null) {
+function buildSlot(slot: Slot, part: Part, tex: Texture | null, dye: string | null) {
   const layer = slotLayers.get(slot);
-  if (!layer || !part.rect) return;
+  if (!layer) return;
   layer.removeChildren().forEach((child) => child.destroy({ children: true }));
   slotFilters.get(slot)?.destroy();
-  slotFilters.set(slot, undefined);
+  slotFilters.delete(slot);
+  renderedParts.set(slot, part.id);
+  if (!tex || !part.rect) return;
 
   const sprite = new Sprite(tex);
   const { x, y, width, height } = part.rect;
@@ -230,7 +235,6 @@ function buildSlot(slot: Slot, part: Part, tex: Texture, dye: string | null) {
     sprite.filters = [filter];
     slotFilters.set(slot, filter);
   }
-  renderedParts.set(slot, part.id);
 }
 
 async function render() {
@@ -248,17 +252,18 @@ async function render() {
     const pending = layers
       .map((slot) => ({ slot, part: selectedPart(appearance, slot) }))
       .filter(({ slot, part }) => {
-        if (!part.image || !part.rect) return false;
         if (rebuilding) return true;
         if (renderedParts.get(slot) !== part.id) return true;
         return slot === "outfit" && part.dyeable === true && renderedDye !== appearance.dye;
       });
-    const images = await Promise.all(pending.map(({ part }) => texture(part.image as string)));
+    const images = await Promise.all(
+      pending.map(({ part }) => (part.image ? texture(part.image) : null)),
+    );
     if (!app || disposed || revision !== id) return;
 
     if (rebuilding) rebuildCharacter();
     for (const [index, { slot, part }] of pending.entries()) {
-      buildSlot(slot, part, images[index] as Texture, appearance.dye);
+      buildSlot(slot, part, images[index], appearance.dye);
     }
 
     renderedBody = appearance.body;
@@ -302,6 +307,8 @@ onMounted(async () => {
     app = next;
     world = new Container();
     next.stage.addChild(world);
+    // The preview host controls touch gestures and page scrolling.
+    next.canvas.style.removeProperty("touch-action");
     target.appendChild(next.canvas);
     observer = new ResizeObserver(layout);
     observer.observe(target);
@@ -314,6 +321,13 @@ onMounted(async () => {
 });
 
 watch(() => props.appearance, render);
+watch(
+  () => props.view,
+  () => {
+    user = { zoom: 1, x: 0, y: 0 };
+    layout();
+  },
+);
 onBeforeUnmount(() => {
   disposed = true;
   if (frame) cancelAnimationFrame(frame);

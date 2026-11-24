@@ -49,11 +49,11 @@ for (const [body, profile] of Object.entries(bodies)) {
     for (const part of parts) {
       if (!part.sprite) continue;
       register(part.sprite, body);
-      if (slot === "outfit") {
+      if (slot === "outfit" || slot === "shape") {
         const path = part.sprite.replace(/\.png$/, ".webp");
         const url = new URL(path, thumbnailRoot);
         if (!existsSync(url)) {
-          errors.push(`Missing outfit thumbnail: thumbnails/${path}`);
+          errors.push(`Missing thumbnail: thumbnails/${path}`);
         } else if (!hasWebpContainer(readFileSync(url))) {
           errors.push(`Invalid or incomplete WebP: thumbnails/${path}`);
         }

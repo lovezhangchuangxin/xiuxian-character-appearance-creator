@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import CharacterCanvas from "./components/CharacterCanvas.vue";
 import {
   bodies,
@@ -12,7 +12,7 @@ import {
   type Body,
   type Slot,
 } from "./character/catalog";
-import { spriteUrl } from "./character/spriteUrls";
+import { shapeThumbnailUrl, spriteUrl } from "./character/spriteUrls";
 import { decodeAppearance, encodeAppearance, savedAppearanceKey } from "./character/appearanceCode";
 
 const appearance = ref(makeAppearance("female"));
@@ -25,9 +25,16 @@ const announcement = ref("");
 const labels = Object.fromEntries(slots.map((slot) => [slot.id, slot.label]));
 const outfit = computed(() => selectedPart(appearance.value, "outfit"));
 const canvas = ref<InstanceType<typeof CharacterCanvas>>();
-const codeVisible = ref(false);
-const codeInput = ref<HTMLInputElement>();
-const codeText = ref("");
+const view = ref<"full" | "portrait">("full");
+const views = [
+  { id: "full", label: "全身" },
+  { id: "portrait", label: "面部" },
+] as const;
+const codeDialog = ref<HTMLDialogElement>();
+const currentCodeInput = ref<HTMLInputElement>();
+const currentCode = computed(() => encodeAppearance(appearance.value));
+const importCodeText = ref("");
+const codeFeedback = ref("");
 const saveFeedback = ref("");
 const hasSavedAppearance = ref(false);
 
@@ -58,20 +65,16 @@ onMounted(() => {
 });
 onUnmounted(() => window.removeEventListener("storage", onStorageChange));
 
-function applyCode(code: string, success: string, invalid: string) {
+function applyCode(code: string) {
   const next = decodeAppearance(code);
-  if (!next) {
-    saveFeedback.value = invalid;
-    return;
-  }
+  if (!next) return false;
   appearance.value = next;
-  codeText.value = encodeAppearance(next);
-  saveFeedback.value = success;
+  return true;
 }
 
 function saveAppearance() {
   try {
-    localStorage.setItem(savedAppearanceKey, encodeAppearance(appearance.value));
+    localStorage.setItem(savedAppearanceKey, currentCode.value);
     hasSavedAppearance.value = true;
     saveFeedback.value = "当前外观已保存到此浏览器。";
   } catch {
@@ -83,32 +86,36 @@ function loadAppearance() {
   try {
     const code = localStorage.getItem(savedAppearanceKey);
     hasSavedAppearance.value = code !== null;
-    applyCode(
-      code ?? "",
-      "已读取本地存档。",
-      code ? "本地存档无法读取。" : "此浏览器还没有外观存档。",
-    );
+    if (code === null) saveFeedback.value = "此浏览器还没有外观存档。";
+    else saveFeedback.value = applyCode(code) ? "已读取本地存档。" : "本地存档无法读取。";
   } catch {
     saveFeedback.value = "浏览器无法读取本地存档。";
   }
 }
 
-function toggleCode() {
-  codeVisible.value = !codeVisible.value;
-  if (codeVisible.value) codeText.value = encodeAppearance(appearance.value);
+function openCodeDialog() {
+  codeFeedback.value = "";
+  codeDialog.value?.showModal();
+}
+
+function importAppearance() {
+  if (!applyCode(importCodeText.value)) {
+    codeFeedback.value = "外观码无效，请检查是否粘贴完整。";
+    return;
+  }
+  importCodeText.value = "";
+  saveFeedback.value = "已导入外观。";
+  codeDialog.value?.close();
 }
 
 async function copyAppearance() {
-  const code = encodeAppearance(appearance.value);
-  codeText.value = code;
   try {
-    await navigator.clipboard.writeText(code);
-    saveFeedback.value = "已复制当前外观码。";
+    await navigator.clipboard.writeText(currentCode.value);
+    codeFeedback.value = "已复制当前外观码。";
   } catch {
-    await nextTick();
-    codeInput.value?.focus();
-    codeInput.value?.select();
-    saveFeedback.value = "当前外观码已选中，请手动复制。";
+    currentCodeInput.value?.focus();
+    currentCodeInput.value?.select();
+    codeFeedback.value = "当前外观码已选中，请手动复制。";
   }
 }
 
@@ -178,9 +185,20 @@ function randomize() {
     </header>
 
     <div class="workspace">
-      <section class="stage" aria-label="预览">
+      <section class="stage" :class="{ 'is-portrait': view === 'portrait' }" aria-label="预览">
         <div class="stage-orbit" aria-hidden="true"></div>
-        <CharacterCanvas ref="canvas" :appearance="appearance" />
+        <CharacterCanvas ref="canvas" :appearance="appearance" :view="view" />
+        <div class="canvas-tools view-modes" role="group" aria-label="预览范围">
+          <button
+            v-for="mode in views"
+            :key="mode.id"
+            type="button"
+            :aria-pressed="view === mode.id"
+            @click="view = mode.id"
+          >
+            {{ mode.label }}
+          </button>
+        </div>
         <div class="canvas-tools" role="group" aria-label="视角控制">
           <button type="button" aria-label="缩小" title="缩小" @click="canvas?.zoomStep(-1)">
             −
@@ -193,7 +211,7 @@ function randomize() {
           </button>
         </div>
         <p class="stage-hint" aria-hidden="true">拖拽平移 · 滚轮缩放 · 双击还原</p>
-        <div class="stage-caption">
+        <div v-if="view === 'full'" class="stage-caption">
           <span class="caption-rule" aria-hidden="true"></span>
           <span>{{ outfit.id === "none" ? outfit.label : `服装 ${outfit.label}` }}</span>
           <span class="caption-rule" aria-hidden="true"></span>
@@ -221,38 +239,8 @@ function randomize() {
             <button type="button" :disabled="!hasSavedAppearance" @click="loadAppearance">
               读取存档
             </button>
-            <button
-              type="button"
-              :aria-expanded="codeVisible"
-              aria-controls="appearance-code"
-              @click="toggleCode"
-            >
-              外观码
-            </button>
+            <button type="button" aria-haspopup="dialog" @click="openCodeDialog">外观码</button>
           </div>
-          <form
-            v-show="codeVisible"
-            id="appearance-code"
-            class="code-panel"
-            @submit.prevent="
-              applyCode(codeText, '已导入外观。', '外观码无效，请检查是否粘贴完整。')
-            "
-          >
-            <label for="appearance-code-input">复制当前外观，或粘贴已有外观码</label>
-            <input
-              id="appearance-code-input"
-              ref="codeInput"
-              v-model="codeText"
-              maxlength="128"
-              spellcheck="false"
-              autocomplete="off"
-              autocapitalize="off"
-            />
-            <div class="action-row">
-              <button type="button" @click="copyAppearance">复制当前外观码</button>
-              <button type="submit">导入外观码</button>
-            </div>
-          </form>
           <p v-if="saveFeedback" class="save-feedback" role="status">{{ saveFeedback }}</p>
         </div>
 
@@ -296,34 +284,6 @@ function randomize() {
         </div>
 
         <div class="part-panel">
-          <fieldset class="part-group">
-            <legend>{{ labels[activeSlot] }}</legend>
-            <div class="part-grid">
-              <button
-                v-for="part in gridParts"
-                :key="part.id"
-                type="button"
-                class="part"
-                :class="{
-                  'has-preview': part.image && part.id !== 'none',
-                  'outfit-part': activeSlot === 'outfit' && part.id !== 'none',
-                }"
-                :aria-pressed="appearance.parts[activeSlot] === part.id"
-                @click="choosePart(activeSlot, part.id)"
-              >
-                <img
-                  v-if="part.image && part.id !== 'none'"
-                  :src="spriteUrl(part.thumbnail ?? part.image)"
-                  alt=""
-                  draggable="false"
-                />
-                <span>{{
-                  part.id === "none" ? (activeSlot === "outfit" ? "内搭" : "无") : part.label
-                }}</span>
-              </button>
-            </div>
-          </fieldset>
-
           <fieldset v-if="activeSlot === 'outfit' && outfit.dyeable" class="part-group">
             <legend>布料颜色</legend>
             <div class="swatches">
@@ -339,9 +299,73 @@ function randomize() {
               </button>
             </div>
           </fieldset>
+          <fieldset class="part-group">
+            <legend>{{ labels[activeSlot] }}</legend>
+            <div class="part-grid">
+              <button
+                v-for="part in gridParts"
+                :key="part.id"
+                type="button"
+                class="part"
+                :class="{
+                  'has-preview': part.image && part.id !== 'none',
+                  'outfit-part': activeSlot === 'outfit' && part.id !== 'none',
+                  'shape-part': activeSlot === 'shape',
+                }"
+                :aria-pressed="appearance.parts[activeSlot] === part.id"
+                @click="choosePart(activeSlot, part.id)"
+              >
+                <img
+                  v-if="part.image && part.id !== 'none'"
+                  :src="
+                    activeSlot === 'shape'
+                      ? shapeThumbnailUrl(part.image)
+                      : spriteUrl(part.thumbnail ?? part.image)
+                  "
+                  alt=""
+                  draggable="false"
+                />
+                <span>{{
+                  part.id === "none" ? (activeSlot === "outfit" ? "内搭" : "无") : part.label
+                }}</span>
+              </button>
+            </div>
+          </fieldset>
         </div>
       </aside>
     </div>
+    <dialog ref="codeDialog" class="code-dialog" aria-labelledby="code-title">
+      <div class="code-panel">
+        <div class="panel-row">
+          <h2 id="code-title">外观码</h2>
+          <div class="action-row">
+            <button type="button" @click="codeDialog?.close()">关闭</button>
+          </div>
+        </div>
+        <label for="current-appearance-code">当前外观码</label>
+        <input id="current-appearance-code" ref="currentCodeInput" :value="currentCode" readonly />
+        <div class="action-row">
+          <button type="button" @click="copyAppearance">复制当前外观码</button>
+        </div>
+        <form class="code-panel code-import" @submit.prevent="importAppearance">
+          <label for="appearance-code-input">导入外观码</label>
+          <input
+            id="appearance-code-input"
+            v-model="importCodeText"
+            maxlength="128"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            placeholder="粘贴已有外观码"
+          />
+          <div class="action-row">
+            <button type="submit">导入外观码</button>
+          </div>
+        </form>
+        <p v-if="codeFeedback" class="save-feedback" role="status">{{ codeFeedback }}</p>
+      </div>
+    </dialog>
+
     <p class="visually-hidden" aria-live="polite">{{ announcement }}</p>
   </main>
 </template>

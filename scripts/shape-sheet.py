@@ -82,6 +82,15 @@ def extend_neck(shape, neck):
     return clean_alpha(new)
 
 
+def save_thumbnail(shape, body, name):
+    destination = ROOT / "assets/thumbnails/faces" / body / "shapes"
+    destination.mkdir(parents=True, exist_ok=True)
+    # All variants share the same crop so cheek and jaw widths stay comparable.
+    thumbnail = shape.crop((64, 380, 448, NECK_CROP[body] + 18))
+    thumbnail.thumbnail((128, 64), Image.Resampling.LANCZOS)
+    thumbnail.save(destination / f"{name}.webp", quality=86)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--body", choices=NECK_CROP, required=True)
@@ -117,6 +126,7 @@ def main():
         shape = extend_neck(shape, neck)
         name = f"{index + 1:02d}.png"
         shape.save(destination / name)
+        save_thumbnail(shape, args.body, name.removesuffix(".png"))
         review.alpha_composite(shape, (col * w, row * SHAPE_HEIGHT))
         report.append(
             {
