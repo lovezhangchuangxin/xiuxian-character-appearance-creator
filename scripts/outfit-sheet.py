@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 from eye_sheet import clean_alpha
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 SIZE = (1024, 1536)
@@ -87,6 +87,33 @@ def fitted(piece, fit):
     overlay = Image.new("RGBA", SIZE)
     overlay.alpha_composite(art, (x, top))
     return overlay
+
+
+def redraw_collar(art, opening, style):
+    """Open the neckline along the existing lapels in fitted canvas coordinates."""
+    xs, ys = zip(*opening, strict=True)
+    left, top = max(0, min(xs) - 4), max(0, min(ys) - 4)
+    right, bottom = min(art.width, max(xs) + 5), min(art.height, max(ys) + 5)
+    patch = art.crop((left, top, right, bottom))
+    scale = 4
+    mask = Image.new("L", (patch.width * scale, patch.height * scale))
+    ImageDraw.Draw(mask).polygon(
+        [((x - left) * scale, (y - top) * scale) for x, y in opening], fill=255
+    )
+    opening_mask = mask.resize(patch.size, Image.Resampling.LANCZOS)
+    alpha = ImageChops.multiply(patch.getchannel("A"), ImageOps.invert(opening_mask))
+
+    if style == "inner":
+        # Shade a thin fabric lip along the turned edge of the retained collar.
+        feathered = np.asarray(opening_mask.filter(ImageFilter.GaussianBlur(1.4))) / 255
+        fabric = 1 - np.asarray(opening_mask) / 255
+        shadow = feathered * fabric * 0.58
+        rgb = np.asarray(patch)[..., :3] * (1 - shadow[..., None])
+        patch = Image.fromarray(np.rint(rgb).astype(np.uint8))
+
+    patch.putalpha(alpha)
+    art.paste(patch, (left, top))
+    return art
 
 
 def runs(row):
@@ -201,6 +228,10 @@ def main():
     args = parser.parse_args()
     fit = FIT[args.body]
     overrides = json.loads(args.wrists.read_text()) if args.wrists else {}
+    collar_path = (
+        ROOT / "assets/source/fit-tests/outfits/numbered-4x4/male/collar-openings.json"
+    )
+    collars = json.loads(collar_path.read_text()) if args.body == "male" else {}
     source = ROOT / "assets/sprites/bodies" / args.body / "white.png"
     base = Image.open(source).convert("RGBA")
     head = Image.open(
@@ -234,6 +265,8 @@ def main():
                         )
                     )
                     garment = fitted(clean_alpha(cell), fit)
+                    if name in collars:
+                        redraw_collar(garment, **collars[name])
                     wearing, wrists = finish(
                         garment, base, fit, overrides.get(name, {})
                     )

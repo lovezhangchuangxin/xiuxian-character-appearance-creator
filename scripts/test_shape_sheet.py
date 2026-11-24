@@ -51,3 +51,27 @@ class NeckHighlightsTest(unittest.TestCase):
                 self.assertEqual(result.getpixel((256, row)), outline)
                 self.assertEqual(result.getpixel((256, 548)), skin)
                 self.assertGreater(join, row + 4)
+
+    def test_jaw_shadow_fades_after_the_contour_has_blended(self):
+        skin = (241, 190, 166, 255)
+        shadow = (211, 154, 133, 255)
+        outline = (81, 47, 35, 255)
+        master = Image.new("RGBA", (512, 620), skin)
+        ImageDraw.Draw(master).line((201, 528, 307, 528), fill=outline, width=3)
+        edited = Image.new("RGBA", (512, 620), skin)
+        draw = ImageDraw.Draw(edited)
+        draw.rectangle((205, 534, 304, 568), fill=shadow)
+        draw.line((201, 531, 307, 531), fill=outline, width=3)
+
+        with patch.dict(
+            register.__globals__, {"align_tile": Mock(return_value=(edited, None))}
+        ):
+            shaped, _, _, _ = register(master, edited, 547)
+
+        self.assertEqual(shaped.getpixel((256, 531)), outline)
+        self.assertGreater(shaped.getpixel((256, 553))[0], shadow[0])
+        self.assertLess(shaped.getpixel((256, 553))[0], skin[0])
+        self.assertEqual(shaped.getpixel((256, 567)), skin)
+        self.assertEqual(
+            shaped.getchannel("A").tobytes(), master.getchannel("A").tobytes()
+        )

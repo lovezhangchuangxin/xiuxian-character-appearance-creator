@@ -61,7 +61,23 @@ def register(original, edited, neck):
 
     # Blend in premultiplied space near the new silhouette to avoid dark fringes.
     shaped = Image.composite(aligned.convert("RGBa"), original.convert("RGBa"), mix)
-    shaped = clean_alpha(shaped.convert("RGBA"))
+
+    # The contour must resolve quickly to avoid doubling the jaw line. Keep its
+    # shadow longer in the opaque neck interior without moving the silhouette.
+    shade = inside_neck * (
+        ramp(y, transition, transition + 9) - ramp(y, transition, transition + 28)
+    )
+    base_pixels = np.asarray(original, dtype=np.int16)
+    aligned_pixels = np.asarray(aligned, dtype=np.int16)
+    opaque_neck = (base_pixels[..., 3] >= 248) & (aligned_pixels[..., 3] >= 248)
+    color_delta = aligned_pixels[..., :3] - base_pixels[..., :3]
+    pixels = np.array(shaped.convert("RGBA"))
+    pixels[..., :3] = np.clip(
+        np.rint(pixels[..., :3] + (shade * opaque_neck)[..., None] * color_delta),
+        0,
+        255,
+    ).astype(np.uint8)
+    shaped = clean_alpha(Image.fromarray(pixels))
     join = max(neck + 20, transition + 10)
     return shaped, matrix, join, jaw
 

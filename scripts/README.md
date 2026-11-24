@@ -65,7 +65,7 @@ uv run python scripts/outfit-sheet.py --body male --sheets \
   --output "$art_work/outfits"
 ```
 
-服装四张原稿各 2 × 2，按参数顺序连续编号。袖口对位需要手调时，可加 `--wrists path/to/wrists.json`。格式见下方，`left` 与 `right` 按画面左右，坐标以 1024 × 1536 画布为基准。可从试装输出的 `placements.json` 读取自动结果作为起点。
+服装四张原稿各 2 × 2，按参数顺序连续编号。男体生成时会读取 [领口定位数据](../assets/source/fit-tests/outfits/numbered-4x4/male/collar-openings.json)，用 1024 × 1536 画布坐标定义交领开口与保留的内领。袖口对位需要手调时，可加 `--wrists path/to/wrists.json`。格式见下方，`left` 与 `right` 按画面左右，坐标以 1024 × 1536 画布为基准。可从试装输出的 `placements.json` 读取自动结果作为起点。
 
 ```json
 { "01": { "left": [320, 725], "right": [705, 725] } }

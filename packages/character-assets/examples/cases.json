@@ -88,5 +88,20 @@
       "topHair": "none",
       "outfit": "10"
     }
+  },
+  {
+    "id": "male-open-cross-collar",
+    "body": "male",
+    "parts": {
+      "shape": "01",
+      "brows": "01",
+      "eyes": "06",
+      "nose": "01",
+      "mouth": "01",
+      "frontHair": "01",
+      "backHair": "01",
+      "topHair": "01",
+      "outfit": "12"
+    }
   }
 ]

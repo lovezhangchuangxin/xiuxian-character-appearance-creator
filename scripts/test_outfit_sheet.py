@@ -4,9 +4,9 @@ from runpy import run_path
 
 from PIL import Image
 
-contour_collar = run_path(str(Path(__file__).with_name("outfit-sheet.py")))[
-    "contour_collar"
-]
+outfit_sheet = run_path(str(Path(__file__).with_name("outfit-sheet.py")))
+contour_collar = outfit_sheet["contour_collar"]
+redraw_collar = outfit_sheet["redraw_collar"]
 
 
 class CollarContourTest(unittest.TestCase):
@@ -25,3 +25,21 @@ class CollarContourTest(unittest.TestCase):
         art.paste((88, 76, 64, 255), (0, 25, 96, 96))
 
         self.assertEqual(contour_collar(art.copy(), 48).tobytes(), art.tobytes())
+
+    def test_redrawn_opening_preserves_the_lapels_and_cloth_below(self):
+        cloth = (88, 76, 64, 255)
+        art = Image.new("RGBA", (96, 96), cloth)
+        opening = [(25, 10), (25, 28), (48, 56), (70, 28), (70, 10)]
+
+        opened = redraw_collar(art.copy(), opening, "open")
+        inner = redraw_collar(art.copy(), opening, "inner")
+
+        for fitted in (opened, inner):
+            self.assertEqual(fitted.getpixel((48, 30))[3], 0)
+            self.assertEqual(fitted.getpixel((12, 32)), cloth)
+            self.assertEqual(fitted.getpixel((48, 64)), cloth)
+            self.assertGreater(sum(fitted.getchannel("A").histogram()[1:-1]), 0)
+        self.assertEqual(
+            opened.getchannel("A").tobytes(), inner.getchannel("A").tobytes()
+        )
+        self.assertNotEqual(opened.tobytes(), inner.tobytes())

@@ -1,6 +1,6 @@
 {
   "name": "@xiuxian/character-assets",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "private": true,
   "exports": {
     "./manifest.json": "./dist/manifest.json"
