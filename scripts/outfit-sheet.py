@@ -46,14 +46,16 @@ def contour_collar(art, center):
     y = np.arange(height)[:, None]
     curve = np.maximum(0, 1 - ((x - center) / 43) ** 2) ** 2
     displacement = 14 * curve * (1 - y / (height - 1)) ** 2
-    source_y = y - displacement
-    lower = np.floor(np.maximum(0, source_y)).astype(int)
-    fraction = np.maximum(0, source_y) - lower
+    # Pad the cropped edge with transparent pixels so fractional rows
+    # sample both the fabric and the space above it in premultiplied alpha.
+    padded = np.pad(rgba, ((1, 0), (0, 0), (0, 0)))
+    source_y = np.maximum(-1, y - displacement) + 1
+    lower = np.floor(source_y).astype(int)
+    fraction = source_y - lower
     shifted = (
-        rgba[lower, x] * (1 - fraction[..., None])
-        + rgba[np.minimum(lower + 1, height - 1), x] * fraction[..., None]
+        padded[lower, x] * (1 - fraction[..., None])
+        + padded[np.minimum(lower + 1, height), x] * fraction[..., None]
     )
-    shifted[source_y < 0] = 0
     patch = Image.fromarray(shifted.round().astype(np.uint8), mode="RGBa").convert(
         "RGBA"
     )

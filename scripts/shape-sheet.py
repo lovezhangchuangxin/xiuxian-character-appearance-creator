@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 from eye_sheet import CELL_SIZE, align_tile, clean_alpha
 from PIL import Image
+from scipy.ndimage import gaussian_filter
 
 ROOT = Path(__file__).resolve().parents[1]
 NECK_CROP = {"male": 559, "female": 547}
@@ -27,6 +28,14 @@ def scale_to_base(original, aligned):
     return Image.fromarray(generated.round().astype(np.uint8))
 
 
+def jaw_row(image, neck):
+    # Find the center jaw outline, below the mouth and above the source lapels.
+    top = neck - 46
+    sample = np.asarray(image)[top : neck + 27, 233:279, :3]
+    luma = np.median(sample, axis=1) @ [0.2126, 0.7152, 0.0722]
+    return top + int(np.argmin(luma))
+
+
 def register(original, edited, neck):
     aligned, matrix = align_tile(original, edited, ((18, 390, 495, 566),))
     aligned = clean_alpha(scale_to_base(original, aligned))
@@ -36,19 +45,30 @@ def register(original, edited, neck):
     left = ramp(x, 75, 105)
     right = 1 - ramp(x, 402, 442)
     cheek = ramp(y, 383, 436)
+    # Blend below both outlines, so the old chin does not ghost through the new one.
+    jaw = jaw_row(aligned, neck)
+    transition = max(jaw, jaw_row(original, neck)) + 5
     chin = 1 - ramp(y, neck - 19, neck - 2)
+    # Preserve the master neck sides while keeping the aligned chin through the center.
+    neck_edge = original.getchannel("A").crop((0, neck + 19, w, neck + 20)).getbbox()
+    neck_left, _, neck_right, _ = neck_edge
+    inside_neck = ramp(x, neck_left + 4, neck_left + 20) * (
+        1 - ramp(x, neck_right - 20, neck_right - 4)
+    )
+    aligned_chin = 1 - ramp(y, transition, transition + 9)
+    chin = chin + inside_neck * np.maximum(0, aligned_chin - chin)
     mix = Image.fromarray((left * right * cheek * chin * 255).round().astype(np.uint8))
 
     # Blend in premultiplied space near the new silhouette to avoid dark fringes.
     shaped = Image.composite(aligned.convert("RGBa"), original.convert("RGBa"), mix)
     shaped = clean_alpha(shaped.convert("RGBA"))
-    return shaped, matrix
+    join = max(neck + 20, transition + 10)
+    return shaped, matrix, join, jaw
 
 
-def extend_neck(shape, neck):
+def extend_neck(shape, neck, join, jaw):
     width = shape.width
     # Use a row below the jaw shadow and above the original undergarment.
-    join = neck + 20
     source = shape.crop((0, join - 1, width, join))
     left, _, right, _ = source.getchannel("A").getbbox()
     radius = (right - left) / 2
@@ -57,8 +77,24 @@ def extend_neck(shape, neck):
     middle = round(center)
     chest = np.asarray(shape.crop((middle - 10, 600, middle + 10, 616)))
     chest_light = np.median(chest[..., :3], axis=(0, 1))
+    # Feather the painted highlights before continuing them beyond the original neck.
+    start = max(neck - 8, jaw + 4)
+    patch = np.array(shape.crop((0, start, width, join)))
+    alpha = patch[..., 3].astype(np.float32) / 255
+    coverage = gaussian_filter(alpha, (4, 13))
+    rgb = patch[..., :3].astype(np.float32)
+    blurred = gaussian_filter(rgb * alpha[..., None], (4, 13, 0))
+    blurred /= np.maximum(coverage[..., None], 0.001)
+    edge = np.abs(np.arange(width) - center) / radius
+    weight = (
+        ramp(np.arange(join - start), 0, 18)[:, None] * (1 - ramp(edge, 0.75, 0.94))
+    )[..., None]
+    patch[..., :3] = (rgb * (1 - weight) + blurred * weight).round().astype(np.uint8)
+
     new = Image.new("RGBA", (width, SHAPE_HEIGHT))
-    new.paste(shape.crop((0, 0, width, join)), (0, 0))
+    new.paste(shape.crop((0, 0, width, start)), (0, 0))
+    new.paste(Image.fromarray(patch), (0, start))
+    source = new.crop((0, join - 1, width, join))
     for y in range(join, SHAPE_HEIGHT):
         distance = y - join
         flare = float(ramp(distance, 15, 135))
@@ -123,8 +159,8 @@ def main():
         edited = generated.crop(bounds).resize((w, h), Image.Resampling.LANCZOS)
         if np.count_nonzero(np.asarray(edited.getchannel("A")) > 127) < 60_000:
             raise ValueError(f"Cell {index + 1} is missing its head silhouette.")
-        shape, transform = register(original, edited, neck)
-        shape = extend_neck(shape, neck)
+        shape, transform, join, jaw = register(original, edited, neck)
+        shape = extend_neck(shape, neck, join, jaw)
         name = f"{index + 1:02d}.png"
         shape.save(destination / name)
         save_thumbnail(shape, args.body, name.removesuffix(".png"))

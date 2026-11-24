@@ -78,6 +78,9 @@ def placement(piece, index, body, part):
             (397, 408, 415, 435),
         )
         height = heights[row][col] + (14 if body == "female" else 0)
+        if body == "male" and index == 7:
+            # Let the short bob reach past the ears instead of exposing only its tips.
+            height += 20
         width = round(np.clip(height * aspect, 145, 255))
         alpha = np.asarray(piece.getchannel("A"))
         cap = np.where(alpha[: max(1, round(piece.height * 0.18))] > 96)[1]
