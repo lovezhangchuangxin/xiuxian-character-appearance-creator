@@ -5,7 +5,7 @@
 - 本项目是 2D 修仙角色捏脸与换装编辑器，使用 Vite、Vue 3、TypeScript 和 PixiJS。Node.js 与 pnpm 版本以 `package.json` 为准，依赖使用 `pnpm install --frozen-lockfile`。
 - 工作环境提供 RTK 时，Shell 命令使用 `rtk` 前缀。项目命令可用 `rtk proxy pnpm build` 等形式执行。
 - 用 `pnpm dev` 启动编辑器。改动交付前运行 `pnpm build`，覆盖类型检查、素材检查和生产构建。仅检查素材登记时可运行 `pnpm check:assets`。
-- Python 美术工具位于 `scripts/`，依赖见 `scripts/requirements-art.txt`。中间输出使用临时目录，提交保留正式素材、复现输入和有用的验收图。构建产物、依赖目录和缓存由 `.gitignore` 排除。
+- Python 美术工具位于 `scripts/`，安装方法、命令和写入位置见[素材工具指南](./scripts/README.md)。中间输出使用临时目录，提交保留正式素材、复现输入和有用的验收图。构建产物、依赖目录和缓存由 `.gitignore` 排除。
 
 ## 代码入口
 

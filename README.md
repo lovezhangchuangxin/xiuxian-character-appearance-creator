@@ -20,4 +20,4 @@ pnpm build
 | 生图与试装 | [当前编号批次提示词](./assets/prompts/numbered-parts.md) · [男女整角试装](./assets/source/fit-tests/numbered-4x4/README.md) |
 | 运行时部件、预设和对位 | [素材清单](./src/character/catalog.ts) · [PixiJS 合成](./src/components/CharacterCanvas.vue) |
 
-离线美术工具使用 Python，依赖记录在 [requirements-art.txt](./scripts/requirements-art.txt)。前端开发与构建使用 pnpm。
+离线素材的环境安装、命令示例和输出位置见[素材工具使用指南](./scripts/README.md)。前端开发与构建使用 pnpm。
