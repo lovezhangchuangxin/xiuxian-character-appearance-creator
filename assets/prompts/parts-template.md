@@ -2,9 +2,9 @@
 
 批次开头只保留一种角色声明，并上传同一体型的参考。
 
-| 体型 | 头部参照 | 全身参照 |
-| --- | --- | --- |
-| 成年男性修士 | [完整脸](../references/masters/heads/male/complete.png) · [空脸](../references/masters/heads/male/blank.png) | [男版白内搭母版](../sprites/bodies/male/white.png) |
+| 体型         | 头部参照                                                                                                         | 全身参照                                             |
+| ------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 成年男性修士 | [完整脸](../references/masters/heads/male/complete.png) · [空脸](../references/masters/heads/male/blank.png)     | [男版白内搭母版](../sprites/bodies/male/white.png)   |
 | 成年女性修士 | [完整脸](../references/masters/heads/female/complete.png) · [空脸](../references/masters/heads/female/blank.png) | [女版白内搭母版](../sprites/bodies/female/white.png) |
 
 ## 发型

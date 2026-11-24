@@ -1,16 +1,16 @@
 # 角色美术素材
 
-| 目录 | 用途 |
-| --- | --- |
-| [references/style](./references/style/) | 修仙漫画线稿、上色和服饰参考 |
-| [references/masters/bodies/original](./references/masters/bodies/original/) | 原始男女身体模板 |
-| [references/masters/heads](./references/masters/heads/) | 男女各自的空脸、完整脸和同尺度对照 |
-| [references/hair](./references/hair/) | 编号发片使用的发色和线稿参照 |
-| [prompts](./prompts/README.md) | 可复制模板和能复现当前素材的生图记录 |
-| [source/sheets](./source/sheets/) | 在用素材的生图原稿 |
-| [source/fit-tests](./source/fit-tests/) | 当前批次的载图、坐标和验收图 |
-| [sprites](./sprites/) | 编辑器加载的透明图层 |
-| [thumbnails/outfits](./thumbnails/outfits/) | 编辑器服装格的轻量缩略图 |
+| 目录                                                                        | 用途                                 |
+| --------------------------------------------------------------------------- | ------------------------------------ |
+| [references/style](./references/style/)                                     | 修仙漫画线稿、上色和服饰参考         |
+| [references/masters/bodies/original](./references/masters/bodies/original/) | 原始男女身体模板                     |
+| [references/masters/heads](./references/masters/heads/)                     | 男女各自的空脸、完整脸和同尺度对照   |
+| [references/hair](./references/hair/)                                       | 编号发片使用的发色和线稿参照         |
+| [prompts](./prompts/README.md)                                              | 可复制模板和能复现当前素材的生图记录 |
+| [source/sheets](./source/sheets/)                                           | 在用素材的生图原稿                   |
+| [source/fit-tests](./source/fit-tests/)                                     | 当前批次的载图、坐标和验收图         |
+| [sprites](./sprites/)                                                       | 编辑器加载的透明图层                 |
+| [thumbnails/outfits](./thumbnails/outfits/)                                 | 编辑器服装格的轻量缩略图             |
 
 白内搭同时作为运行时身体和全身对位参考，直接使用 [男版白内搭](./sprites/bodies/male/white.png)或[女版白内搭](./sprites/bodies/female/white.png)。
 

@@ -2,10 +2,7 @@
   "body": "female",
   "part": "mouths",
   "grid": 4,
-  "edited_size": [
-    1140,
-    1380
-  ],
+  "edited_size": [1140, 1380],
   "edited_background_alpha": {
     "sampled_pixels": 532636,
     "zero_alpha_pixels": 529531,
@@ -16,23 +13,11 @@
     {
       "index": 1,
       "file": "mouths-01.png",
-      "offset": [
-        200,
-        432
-      ],
-      "size": [
-        118,
-        56
-      ],
+      "offset": [200, 432],
+      "size": [118, 56],
       "registration": {
-        "scale": [
-          1.004,
-          1.008
-        ],
-        "shift": [
-          -2.0,
-          0.0
-        ],
+        "scale": [1.004, 1.008],
+        "shift": [-2.0, 0.0],
         "edge_error_before": 0.1225,
         "edge_error_after": 0.1
       },
@@ -43,23 +28,11 @@
     {
       "index": 2,
       "file": "mouths-02.png",
-      "offset": [
-        202,
-        432
-      ],
-      "size": [
-        119,
-        56
-      ],
+      "offset": [202, 432],
+      "size": [119, 56],
       "registration": {
-        "scale": [
-          1.0,
-          1.004
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.004],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1167,
         "edge_error_after": 0.0969
       },
@@ -70,23 +43,11 @@
     {
       "index": 3,
       "file": "mouths-03.png",
-      "offset": [
-        199,
-        431
-      ],
-      "size": [
-        120,
-        52
-      ],
+      "offset": [199, 431],
+      "size": [120, 52],
       "registration": {
-        "scale": [
-          1.0,
-          1.008
-        ],
-        "shift": [
-          -1.0,
-          0.0
-        ],
+        "scale": [1.0, 1.008],
+        "shift": [-1.0, 0.0],
         "edge_error_before": 0.1139,
         "edge_error_after": 0.0957
       },
@@ -97,23 +58,11 @@
     {
       "index": 4,
       "file": "mouths-04.png",
-      "offset": [
-        200,
-        432
-      ],
-      "size": [
-        117,
-        58
-      ],
+      "offset": [200, 432],
+      "size": [117, 58],
       "registration": {
-        "scale": [
-          1.0,
-          1.004
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.004],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1159,
         "edge_error_after": 0.0973
       },
@@ -124,23 +73,11 @@
     {
       "index": 5,
       "file": "mouths-05.png",
-      "offset": [
-        199,
-        430
-      ],
-      "size": [
-        120,
-        56
-      ],
+      "offset": [199, 430],
+      "size": [120, 56],
       "registration": {
-        "scale": [
-          1.004,
-          1.004
-        ],
-        "shift": [
-          -1.0,
-          0.0
-        ],
+        "scale": [1.004, 1.004],
+        "shift": [-1.0, 0.0],
         "edge_error_before": 0.1221,
         "edge_error_after": 0.1002
       },
@@ -151,23 +88,11 @@
     {
       "index": 6,
       "file": "mouths-06.png",
-      "offset": [
-        206,
-        433
-      ],
-      "size": [
-        110,
-        52
-      ],
+      "offset": [206, 433],
+      "size": [110, 52],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.117,
         "edge_error_after": 0.0918
       },
@@ -178,23 +103,11 @@
     {
       "index": 7,
       "file": "mouths-07.png",
-      "offset": [
-        199,
-        430
-      ],
-      "size": [
-        120,
-        63
-      ],
+      "offset": [199, 430],
+      "size": [120, 63],
       "registration": {
-        "scale": [
-          1.0,
-          1.004
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.004],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.113,
         "edge_error_after": 0.0905
       },
@@ -205,23 +118,11 @@
     {
       "index": 8,
       "file": "mouths-08.png",
-      "offset": [
-        204,
-        430
-      ],
-      "size": [
-        113,
-        59
-      ],
+      "offset": [204, 430],
+      "size": [113, 59],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1167,
         "edge_error_after": 0.0909
       },
@@ -232,23 +133,11 @@
     {
       "index": 9,
       "file": "mouths-09.png",
-      "offset": [
-        206,
-        434
-      ],
-      "size": [
-        113,
-        53
-      ],
+      "offset": [206, 434],
+      "size": [113, 53],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1191,
         "edge_error_after": 0.0935
       },
@@ -259,23 +148,11 @@
     {
       "index": 10,
       "file": "mouths-10.png",
-      "offset": [
-        220,
-        441
-      ],
-      "size": [
-        101,
-        48
-      ],
+      "offset": [220, 441],
+      "size": [101, 48],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1168,
         "edge_error_after": 0.0909
       },
@@ -286,23 +163,11 @@
     {
       "index": 11,
       "file": "mouths-11.png",
-      "offset": [
-        216,
-        430
-      ],
-      "size": [
-        102,
-        51
-      ],
+      "offset": [216, 430],
+      "size": [102, 51],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1118,
         "edge_error_after": 0.0889
       },
@@ -313,23 +178,11 @@
     {
       "index": 12,
       "file": "mouths-12.png",
-      "offset": [
-        200,
-        429
-      ],
-      "size": [
-        118,
-        60
-      ],
+      "offset": [200, 429],
+      "size": [118, 60],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1177,
         "edge_error_after": 0.0935
       },
@@ -340,23 +193,11 @@
     {
       "index": 13,
       "file": "mouths-13.png",
-      "offset": [
-        200,
-        430
-      ],
-      "size": [
-        117,
-        56
-      ],
+      "offset": [200, 430],
+      "size": [117, 56],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1215,
         "edge_error_after": 0.0934
       },
@@ -367,23 +208,11 @@
     {
       "index": 14,
       "file": "mouths-14.png",
-      "offset": [
-        216,
-        437
-      ],
-      "size": [
-        100,
-        39
-      ],
+      "offset": [216, 437],
+      "size": [100, 39],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1172,
         "edge_error_after": 0.0899
       },
@@ -394,23 +223,11 @@
     {
       "index": 15,
       "file": "mouths-15.png",
-      "offset": [
-        196,
-        432
-      ],
-      "size": [
-        125,
-        55
-      ],
+      "offset": [196, 432],
+      "size": [125, 55],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1147,
         "edge_error_after": 0.0886
       },
@@ -421,23 +238,11 @@
     {
       "index": 16,
       "file": "mouths-16.png",
-      "offset": [
-        201,
-        432
-      ],
-      "size": [
-        117,
-        54
-      ],
+      "offset": [201, 432],
+      "size": [117, 54],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          -1.0,
-          1.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [-1.0, 1.0],
         "edge_error_before": 0.1172,
         "edge_error_after": 0.0895
       },

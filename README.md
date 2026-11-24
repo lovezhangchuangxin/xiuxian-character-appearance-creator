@@ -14,10 +14,10 @@ pnpm build
 
 ## 扩展入口
 
-| 内容 | 入口 |
-| --- | --- |
-| 五官、发型和换装素材 | [目录结构、坐标和入库流程](./assets/README.md) |
-| 生图与试装 | [当前编号批次提示词](./assets/prompts/numbered-parts.md) · [男女整角试装](./assets/source/fit-tests/numbered-4x4/README.md) |
-| 运行时部件、预设和对位 | [素材清单](./src/character/catalog.ts) · [PixiJS 合成](./src/components/CharacterCanvas.vue) |
+| 内容                   | 入口                                                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 五官、发型和换装素材   | [目录结构、坐标和入库流程](./assets/README.md)                                                                              |
+| 生图与试装             | [当前编号批次提示词](./assets/prompts/numbered-parts.md) · [男女整角试装](./assets/source/fit-tests/numbered-4x4/README.md) |
+| 运行时部件、预设和对位 | [素材清单](./src/character/catalog.ts) · [PixiJS 合成](./src/components/CharacterCanvas.vue)                                |
 
 离线素材的环境安装、命令示例和输出位置见[素材工具使用指南](./scripts/README.md)。前端开发与构建使用 pnpm。

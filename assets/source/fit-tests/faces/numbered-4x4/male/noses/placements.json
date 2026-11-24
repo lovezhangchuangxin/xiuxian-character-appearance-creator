@@ -2,10 +2,7 @@
   "body": "male",
   "part": "noses",
   "grid": 4,
-  "edited_size": [
-    1140,
-    1380
-  ],
+  "edited_size": [1140, 1380],
   "edited_background_alpha": {
     "sampled_pixels": 506260,
     "zero_alpha_pixels": 502549,
@@ -16,23 +13,11 @@
     {
       "index": 1,
       "file": "noses-01.png",
-      "offset": [
-        222,
-        308
-      ],
-      "size": [
-        54,
-        119
-      ],
+      "offset": [222, 308],
+      "size": [54, 119],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0922,
         "edge_error_after": 0.0922
       },
@@ -43,23 +28,11 @@
     {
       "index": 2,
       "file": "noses-02.png",
-      "offset": [
-        221,
-        312
-      ],
-      "size": [
-        70,
-        114
-      ],
+      "offset": [221, 312],
+      "size": [70, 114],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0913,
         "edge_error_after": 0.0913
       },
@@ -70,23 +43,11 @@
     {
       "index": 3,
       "file": "noses-03.png",
-      "offset": [
-        228,
-        309
-      ],
-      "size": [
-        47,
-        119
-      ],
+      "offset": [228, 309],
+      "size": [47, 119],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.096,
         "edge_error_after": 0.087
       },
@@ -97,23 +58,11 @@
     {
       "index": 4,
       "file": "noses-04.png",
-      "offset": [
-        214,
-        308
-      ],
-      "size": [
-        77,
-        120
-      ],
+      "offset": [214, 308],
+      "size": [77, 120],
       "registration": {
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [1.0, 1.0],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0901,
         "edge_error_after": 0.0901
       },
@@ -124,23 +73,11 @@
     {
       "index": 5,
       "file": "noses-05.png",
-      "offset": [
-        219,
-        308
-      ],
-      "size": [
-        65,
-        121
-      ],
+      "offset": [219, 308],
+      "size": [65, 121],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0984,
         "edge_error_after": 0.0939
       },
@@ -151,23 +88,11 @@
     {
       "index": 6,
       "file": "noses-06.png",
-      "offset": [
-        217,
-        312
-      ],
-      "size": [
-        75,
-        117
-      ],
+      "offset": [217, 312],
+      "size": [75, 117],
       "registration": {
-        "scale": [
-          1.0,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [1.0, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0991,
         "edge_error_after": 0.0989
       },
@@ -178,23 +103,11 @@
     {
       "index": 7,
       "file": "noses-07.png",
-      "offset": [
-        211,
-        308
-      ],
-      "size": [
-        82,
-        121
-      ],
+      "offset": [211, 308],
+      "size": [82, 121],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.1037,
         "edge_error_after": 0.0924
       },
@@ -205,23 +118,11 @@
     {
       "index": 8,
       "file": "noses-08.png",
-      "offset": [
-        219,
-        313
-      ],
-      "size": [
-        58,
-        116
-      ],
+      "offset": [219, 313],
+      "size": [58, 116],
       "registration": {
-        "scale": [
-          1.0,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [1.0, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.0943,
         "edge_error_after": 0.0933
       },
@@ -232,23 +133,11 @@
     {
       "index": 9,
       "file": "noses-09.png",
-      "offset": [
-        212,
-        308
-      ],
-      "size": [
-        80,
-        121
-      ],
+      "offset": [212, 308],
+      "size": [80, 121],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.1043,
         "edge_error_after": 0.0983
       },
@@ -259,23 +148,11 @@
     {
       "index": 10,
       "file": "noses-10.png",
-      "offset": [
-        222,
-        309
-      ],
-      "size": [
-        69,
-        118
-      ],
+      "offset": [222, 309],
+      "size": [69, 118],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.1,
         "edge_error_after": 0.095
       },
@@ -286,23 +163,11 @@
     {
       "index": 11,
       "file": "noses-11.png",
-      "offset": [
-        210,
-        308
-      ],
-      "size": [
-        85,
-        121
-      ],
+      "offset": [210, 308],
+      "size": [85, 121],
       "registration": {
-        "scale": [
-          0.996,
-          1.004
-        ],
-        "shift": [
-          0.0,
-          0.0
-        ],
+        "scale": [0.996, 1.004],
+        "shift": [0.0, 0.0],
         "edge_error_before": 0.1084,
         "edge_error_after": 0.0935
       },
@@ -313,23 +178,11 @@
     {
       "index": 12,
       "file": "noses-12.png",
-      "offset": [
-        215,
-        308
-      ],
-      "size": [
-        74,
-        121
-      ],
+      "offset": [215, 308],
+      "size": [74, 121],
       "registration": {
-        "scale": [
-          0.996,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          1.0
-        ],
+        "scale": [0.996, 1.0],
+        "shift": [0.0, 1.0],
         "edge_error_before": 0.1022,
         "edge_error_after": 0.0898
       },
@@ -340,23 +193,11 @@
     {
       "index": 13,
       "file": "noses-13.png",
-      "offset": [
-        222,
-        312
-      ],
-      "size": [
-        71,
-        116
-      ],
+      "offset": [222, 312],
+      "size": [71, 116],
       "registration": {
-        "scale": [
-          0.996,
-          0.996
-        ],
-        "shift": [
-          0.0,
-          1.0
-        ],
+        "scale": [0.996, 0.996],
+        "shift": [0.0, 1.0],
         "edge_error_before": 0.1036,
         "edge_error_after": 0.0888
       },
@@ -367,23 +208,11 @@
     {
       "index": 14,
       "file": "noses-14.png",
-      "offset": [
-        219,
-        313
-      ],
-      "size": [
-        60,
-        115
-      ],
+      "offset": [219, 313],
+      "size": [60, 115],
       "registration": {
-        "scale": [
-          0.996,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          1.0
-        ],
+        "scale": [0.996, 1.0],
+        "shift": [0.0, 1.0],
         "edge_error_before": 0.1012,
         "edge_error_after": 0.0862
       },
@@ -394,23 +223,11 @@
     {
       "index": 15,
       "file": "noses-15.png",
-      "offset": [
-        217,
-        309
-      ],
-      "size": [
-        75,
-        121
-      ],
+      "offset": [217, 309],
+      "size": [75, 121],
       "registration": {
-        "scale": [
-          0.996,
-          0.996
-        ],
-        "shift": [
-          0.0,
-          1.0
-        ],
+        "scale": [0.996, 0.996],
+        "shift": [0.0, 1.0],
         "edge_error_before": 0.1093,
         "edge_error_after": 0.0855
       },
@@ -421,23 +238,11 @@
     {
       "index": 16,
       "file": "noses-16.png",
-      "offset": [
-        215,
-        308
-      ],
-      "size": [
-        67,
-        120
-      ],
+      "offset": [215, 308],
+      "size": [67, 120],
       "registration": {
-        "scale": [
-          0.996,
-          1.0
-        ],
-        "shift": [
-          0.0,
-          1.0
-        ],
+        "scale": [0.996, 1.0],
+        "shift": [0.0, 1.0],
         "edge_error_before": 0.1023,
         "edge_error_after": 0.0876
       },

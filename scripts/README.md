@@ -12,15 +12,15 @@ art_work="$(mktemp -d)"
 
 后续命令沿用同一终端中的 `art_python` 和 `art_work`。已配置这些依赖时，也可以直接用 `python3`。Windows 使用虚拟环境中的 `Scripts/python.exe`。本机启用 RTK 时，按项目约定为命令加 `rtk` 前缀。
 
-| 脚本 | 用途 | 写入位置 |
-| --- | --- | --- |
-| [feature_sheet.py](./feature_sheet.py) | 制作五官留空载图，从编辑后的网格提取透明裁片并回贴 | `--output` |
-| [install-feature-batch.py](./install-feature-batch.py) | 校验并按原稿顺序安装一组或多组完整 4 × 4 五官裁片 | `assets/sprites/faces/` 和 `src/character/numbered-faces.json` |
-| [shape-sheet.py](./shape-sheet.py) | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部 | 正式脸型 PNG，以及 `--output` 中的定位和验收图 |
-| [hair-sheet.py](./hair-sheet.py) | 按透明轮廓拆成 16 张前发、后发或发髻，计算摆放参数 | `assets/sprites/hair/` 和 `src/character/numbered-hair.json` |
-| [outfit-sheet.py](./outfit-sheet.py) | 合并四张服装原稿，匹配领口和袖口，生成套装与缩略图 | 正式服装 PNG、WebP 缩略图，以及 `--output` 中的试装和定位数据 |
-| [standard_face.py](./standard_face.py) | 从同体型完整脸和空脸拆出一张标准脸的四个部件 | `--output` 中的各部件、坐标和对照图 |
-| [eye_sheet.py](./eye_sheet.py) | 提供对位、差分和透明处理函数，也保留独立眼睛试样命令 | 独立运行时只写 `--output` |
+| 脚本                                                   | 用途                                                 | 写入位置                                                       |
+| ------------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------------------- |
+| [feature_sheet.py](./feature_sheet.py)                 | 制作五官留空载图，从编辑后的网格提取透明裁片并回贴   | `--output`                                                     |
+| [install-feature-batch.py](./install-feature-batch.py) | 校验并按原稿顺序安装一组或多组完整 4 × 4 五官裁片    | `assets/sprites/faces/` 和 `src/character/numbered-faces.json` |
+| [shape-sheet.py](./shape-sheet.py)                     | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部     | 正式脸型 PNG，以及 `--output` 中的定位和验收图                 |
+| [hair-sheet.py](./hair-sheet.py)                       | 按透明轮廓拆成 16 张前发、后发或发髻，计算摆放参数   | `assets/sprites/hair/` 和 `src/character/numbered-hair.json`   |
+| [outfit-sheet.py](./outfit-sheet.py)                   | 合并四张服装原稿，匹配领口和袖口，生成套装与缩略图   | 正式服装 PNG、WebP 缩略图，以及 `--output` 中的试装和定位数据  |
+| [standard_face.py](./standard_face.py)                 | 从同体型完整脸和空脸拆出一张标准脸的四个部件         | `--output` 中的各部件、坐标和对照图                            |
+| [eye_sheet.py](./eye_sheet.py)                         | 提供对位、差分和透明处理函数，也保留独立眼睛试样命令 | 独立运行时只写 `--output`                                      |
 
 会写入正式素材的脚本基于脚本文件所在的仓库定位输出。`--output` 只控制试装或中间文件位置。试跑入库、脸型、发型和服装时可用独立工作树，方便比较生成前后的差异。
 
@@ -69,7 +69,7 @@ art_work="$(mktemp -d)"
 服装四张原稿各 2 × 2，按参数顺序连续编号。袖口对位需要手调时，可加 `--wrists path/to/wrists.json`。格式见下方，`left` 与 `right` 按画面左右，坐标以 1024 × 1536 画布为基准。可从试装输出的 `placements.json` 读取自动结果作为起点。
 
 ```json
-{"01": {"left": [320, 725], "right": [705, 725]}}
+{ "01": { "left": [320, 725], "right": [705, 725] } }
 ```
 
 ## 参考与局部试制
