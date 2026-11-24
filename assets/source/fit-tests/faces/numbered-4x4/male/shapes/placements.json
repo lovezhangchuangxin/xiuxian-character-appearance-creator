@@ -1,0 +1,306 @@
+[
+  {
+    "id": "01",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        0.972
+      ],
+      "shift": [
+        -3.0,
+        -3.0
+      ],
+      "edge_error_before": 0.1512,
+      "edge_error_after": 0.1218
+    }
+  },
+  {
+    "id": "02",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        1.03
+      ],
+      "shift": [
+        -3.0,
+        3.0
+      ],
+      "edge_error_before": 0.1488,
+      "edge_error_after": 0.1196
+    }
+  },
+  {
+    "id": "03",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        0.972
+      ],
+      "shift": [
+        -3.0,
+        -3.0
+      ],
+      "edge_error_before": 0.1504,
+      "edge_error_after": 0.1249
+    }
+  },
+  {
+    "id": "04",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        1.03
+      ],
+      "shift": [
+        -3.0,
+        3.0
+      ],
+      "edge_error_before": 0.1514,
+      "edge_error_after": 0.1208
+    }
+  },
+  {
+    "id": "05",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        1.004
+      ],
+      "shift": [
+        -1.0,
+        -3.0
+      ],
+      "edge_error_before": 0.1381,
+      "edge_error_after": 0.1272
+    }
+  },
+  {
+    "id": "06",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.992,
+        1.004
+      ],
+      "shift": [
+        -2.0,
+        -3.0
+      ],
+      "edge_error_before": 0.1341,
+      "edge_error_after": 0.1161
+    }
+  },
+  {
+    "id": "07",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        1.012
+      ],
+      "shift": [
+        -6.0,
+        0.0
+      ],
+      "edge_error_before": 0.1457,
+      "edge_error_after": 0.1267
+    }
+  },
+  {
+    "id": "08",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        1.008
+      ],
+      "shift": [
+        0.0,
+        -2.0
+      ],
+      "edge_error_before": 0.1479,
+      "edge_error_after": 0.1354
+    }
+  },
+  {
+    "id": "09",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        1.03
+      ],
+      "shift": [
+        -4.0,
+        3.0
+      ],
+      "edge_error_before": 0.1523,
+      "edge_error_after": 0.1211
+    }
+  },
+  {
+    "id": "10",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        1.03
+      ],
+      "shift": [
+        -4.0,
+        3.0
+      ],
+      "edge_error_before": 0.151,
+      "edge_error_after": 0.1219
+    }
+  },
+  {
+    "id": "11",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        0.936
+      ],
+      "shift": [
+        -2.0,
+        -2.0
+      ],
+      "edge_error_before": 0.1479,
+      "edge_error_after": 0.126
+    }
+  },
+  {
+    "id": "12",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        1.03
+      ],
+      "shift": [
+        -4.0,
+        3.0
+      ],
+      "edge_error_before": 0.1519,
+      "edge_error_after": 0.1237
+    }
+  },
+  {
+    "id": "13",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        0.952
+      ],
+      "shift": [
+        -3.0,
+        -2.0
+      ],
+      "edge_error_before": 0.1493,
+      "edge_error_after": 0.1246
+    }
+  },
+  {
+    "id": "14",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        1.0,
+        0.952
+      ],
+      "shift": [
+        -3.0,
+        -2.0
+      ],
+      "edge_error_before": 0.1486,
+      "edge_error_after": 0.1269
+    }
+  },
+  {
+    "id": "15",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        0.952
+      ],
+      "shift": [
+        -3.0,
+        -2.0
+      ],
+      "edge_error_before": 0.1496,
+      "edge_error_after": 0.1235
+    }
+  },
+  {
+    "id": "16",
+    "offset": [
+      0,
+      0
+    ],
+    "registration": {
+      "scale": [
+        0.996,
+        1.0
+      ],
+      "shift": [
+        -3.0,
+        -3.0
+      ],
+      "edge_error_before": 0.1515,
+      "edge_error_after": 0.1016
+    }
+  }
+]

@@ -1,0 +1,488 @@
+{
+  "body": "female",
+  "part": "eyes",
+  "grid": 4,
+  "edited_size": [
+    1140,
+    1380
+  ],
+  "edited_background_alpha": {
+    "sampled_pixels": 532636,
+    "zero_alpha_pixels": 529178,
+    "visible_alpha_pixels": 0,
+    "max_alpha": 2
+  },
+  "variants": [
+    {
+      "index": 1,
+      "file": "eyes-01.png",
+      "offset": [
+        80,
+        281
+      ],
+      "size": [
+        352,
+        63
+      ],
+      "registration": {
+        "scale": [
+          0.996,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1299,
+        "edge_error_after": 0.1054
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 2,
+      "file": "eyes-02.png",
+      "offset": [
+        82,
+        277
+      ],
+      "size": [
+        350,
+        68
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1301,
+        "edge_error_after": 0.102
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 3,
+      "file": "eyes-03.png",
+      "offset": [
+        82,
+        279
+      ],
+      "size": [
+        349,
+        64
+      ],
+      "registration": {
+        "scale": [
+          0.996,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1287,
+        "edge_error_after": 0.1011
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 4,
+      "file": "eyes-04.png",
+      "offset": [
+        82,
+        276
+      ],
+      "size": [
+        349,
+        69
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1333,
+        "edge_error_after": 0.0967
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 5,
+      "file": "eyes-05.png",
+      "offset": [
+        82,
+        286
+      ],
+      "size": [
+        349,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1315,
+        "edge_error_after": 0.1
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 6,
+      "file": "eyes-06.png",
+      "offset": [
+        82,
+        282
+      ],
+      "size": [
+        349,
+        58
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1267,
+        "edge_error_after": 0.1018
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 7,
+      "file": "eyes-07.png",
+      "offset": [
+        82,
+        277
+      ],
+      "size": [
+        348,
+        65
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1257,
+        "edge_error_after": 0.1048
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 8,
+      "file": "eyes-08.png",
+      "offset": [
+        80,
+        282
+      ],
+      "size": [
+        351,
+        60
+      ],
+      "registration": {
+        "scale": [
+          0.996,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1269,
+        "edge_error_after": 0.099
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 9,
+      "file": "eyes-09.png",
+      "offset": [
+        82,
+        279
+      ],
+      "size": [
+        349,
+        62
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1306,
+        "edge_error_after": 0.1013
+      },
+      "quality": {
+        "skin_noise_p95": 2.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 10,
+      "file": "eyes-10.png",
+      "offset": [
+        79,
+        275
+      ],
+      "size": [
+        352,
+        67
+      ],
+      "registration": {
+        "scale": [
+          0.996,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1296,
+        "edge_error_after": 0.1004
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 2
+      }
+    },
+    {
+      "index": 11,
+      "file": "eyes-11.png",
+      "offset": [
+        82,
+        275
+      ],
+      "size": [
+        346,
+        66
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.004
+        ],
+        "shift": [
+          -2.0,
+          -1.0
+        ],
+        "edge_error_before": 0.1289,
+        "edge_error_after": 0.1055
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 12,
+      "file": "eyes-12.png",
+      "offset": [
+        75,
+        275
+      ],
+      "size": [
+        358,
+        68
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1285,
+        "edge_error_after": 0.1007
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 29
+      }
+    },
+    {
+      "index": 13,
+      "file": "eyes-13.png",
+      "offset": [
+        82,
+        285
+      ],
+      "size": [
+        348,
+        62
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1306,
+        "edge_error_after": 0.1017
+      },
+      "quality": {
+        "skin_noise_p95": 2.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 14,
+      "file": "eyes-14.png",
+      "offset": [
+        81,
+        287
+      ],
+      "size": [
+        351,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1255,
+        "edge_error_after": 0.1059
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 15,
+      "file": "eyes-15.png",
+      "offset": [
+        84,
+        285
+      ],
+      "size": [
+        345,
+        65
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -2.0,
+          0.0
+        ],
+        "edge_error_before": 0.1225,
+        "edge_error_after": 0.1078
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    },
+    {
+      "index": 16,
+      "file": "eyes-16.png",
+      "offset": [
+        80,
+        287
+      ],
+      "size": [
+        351,
+        59
+      ],
+      "registration": {
+        "scale": [
+          0.996,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1271,
+        "edge_error_after": 0.1004
+      },
+      "quality": {
+        "skin_noise_p95": 3.0,
+        "opacity_threshold": 6.0,
+        "window_edge_pixels": 0
+      }
+    }
+  ],
+  "rejected": [],
+  "reassembled_background_alpha": {
+    "sampled_pixels": 1919748,
+    "zero_alpha_pixels": 1919748,
+    "visible_alpha_pixels": 0,
+    "max_alpha": 0
+  }
+}

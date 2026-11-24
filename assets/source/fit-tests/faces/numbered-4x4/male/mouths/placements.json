@@ -1,0 +1,456 @@
+{
+  "body": "male",
+  "part": "mouths",
+  "grid": 4,
+  "edited_size": [
+    1140,
+    1380
+  ],
+  "edited_background_alpha": {
+    "sampled_pixels": 506260,
+    "zero_alpha_pixels": 497429,
+    "visible_alpha_pixels": 0,
+    "max_alpha": 3
+  },
+  "variants": [
+    {
+      "index": 1,
+      "file": "mouths-01.png",
+      "offset": [
+        199,
+        433
+      ],
+      "size": [
+        111,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1039,
+        "edge_error_after": 0.0824
+      },
+      "quality": {
+        "skin_noise_p95": 3.0
+      }
+    },
+    {
+      "index": 2,
+      "file": "mouths-02.png",
+      "offset": [
+        187,
+        431
+      ],
+      "size": [
+        133,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.1021,
+        "edge_error_after": 0.084
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 3,
+      "file": "mouths-03.png",
+      "offset": [
+        185,
+        432
+      ],
+      "size": [
+        137,
+        57
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0901,
+        "edge_error_after": 0.0849
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 4,
+      "file": "mouths-04.png",
+      "offset": [
+        187,
+        432
+      ],
+      "size": [
+        131,
+        55
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          0.0,
+          0.0
+        ],
+        "edge_error_before": 0.0833,
+        "edge_error_after": 0.0833
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 5,
+      "file": "mouths-05.png",
+      "offset": [
+        187,
+        430
+      ],
+      "size": [
+        133,
+        59
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0957,
+        "edge_error_after": 0.0864
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 6,
+      "file": "mouths-06.png",
+      "offset": [
+        199,
+        434
+      ],
+      "size": [
+        121,
+        53
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0988,
+        "edge_error_after": 0.0862
+      },
+      "quality": {
+        "skin_noise_p95": 3.0
+      }
+    },
+    {
+      "index": 7,
+      "file": "mouths-07.png",
+      "offset": [
+        182,
+        433
+      ],
+      "size": [
+        144,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0899,
+        "edge_error_after": 0.0885
+      },
+      "quality": {
+        "skin_noise_p95": 3.0
+      }
+    },
+    {
+      "index": 8,
+      "file": "mouths-08.png",
+      "offset": [
+        187,
+        430
+      ],
+      "size": [
+        134,
+        59
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          0.0,
+          0.0
+        ],
+        "edge_error_before": 0.0854,
+        "edge_error_after": 0.0854
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 9,
+      "file": "mouths-09.png",
+      "offset": [
+        187,
+        432
+      ],
+      "size": [
+        134,
+        57
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0954,
+        "edge_error_after": 0.0883
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 10,
+      "file": "mouths-10.png",
+      "offset": [
+        189,
+        433
+      ],
+      "size": [
+        132,
+        54
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0998,
+        "edge_error_after": 0.0869
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 11,
+      "file": "mouths-11.png",
+      "offset": [
+        182,
+        431
+      ],
+      "size": [
+        144,
+        57
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0916,
+        "edge_error_after": 0.0914
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 12,
+      "file": "mouths-12.png",
+      "offset": [
+        188,
+        433
+      ],
+      "size": [
+        127,
+        53
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.004
+        ],
+        "shift": [
+          0.0,
+          0.0
+        ],
+        "edge_error_before": 0.0872,
+        "edge_error_after": 0.0866
+      },
+      "quality": {
+        "skin_noise_p95": 3.0
+      }
+    },
+    {
+      "index": 13,
+      "file": "mouths-13.png",
+      "offset": [
+        185,
+        430
+      ],
+      "size": [
+        136,
+        59
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0965,
+        "edge_error_after": 0.0897
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 14,
+      "file": "mouths-14.png",
+      "offset": [
+        191,
+        432
+      ],
+      "size": [
+        131,
+        57
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.0971,
+        "edge_error_after": 0.0896
+      },
+      "quality": {
+        "skin_noise_p95": 3.0
+      }
+    },
+    {
+      "index": 15,
+      "file": "mouths-15.png",
+      "offset": [
+        187,
+        430
+      ],
+      "size": [
+        139,
+        59
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          -1.0,
+          0.0
+        ],
+        "edge_error_before": 0.093,
+        "edge_error_after": 0.0923
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    },
+    {
+      "index": 16,
+      "file": "mouths-16.png",
+      "offset": [
+        190,
+        433
+      ],
+      "size": [
+        134,
+        56
+      ],
+      "registration": {
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "shift": [
+          0.0,
+          0.0
+        ],
+        "edge_error_before": 0.0906,
+        "edge_error_after": 0.0906
+      },
+      "quality": {
+        "skin_noise_p95": 2.0
+      }
+    }
+  ],
+  "rejected": [],
+  "reassembled_background_alpha": {
+    "sampled_pixels": 1829192,
+    "zero_alpha_pixels": 1829192,
+    "visible_alpha_pixels": 0,
+    "max_alpha": 0
+  }
+}

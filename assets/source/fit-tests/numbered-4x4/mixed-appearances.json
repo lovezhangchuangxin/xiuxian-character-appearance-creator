@@ -1,0 +1,18 @@
+[
+  {"id":"male-01","body":"male","parts":{"shape":"13","brows":"16","eyes":"01","nose":"04","mouth":"08","frontHair":"05","backHair":"11","topHair":"13","outfit":"03"},"dye":null},
+  {"id":"male-02","body":"male","parts":{"shape":"02","brows":"05","eyes":"13","nose":"12","mouth":"01","frontHair":"08","backHair":"14","topHair":"02","outfit":"04"},"dye":null},
+  {"id":"male-03","body":"male","parts":{"shape":"09","brows":"11","eyes":"04","nose":"07","mouth":"15","frontHair":"16","backHair":"01","topHair":"05","outfit":"07"},"dye":null},
+  {"id":"male-04","body":"male","parts":{"shape":"04","brows":"01","eyes":"15","nose":"05","mouth":"09","frontHair":"09","backHair":"12","topHair":"03","outfit":"15"},"dye":null},
+  {"id":"male-05","body":"male","parts":{"shape":"15","brows":"07","eyes":"06","nose":"09","mouth":"12","frontHair":"07","backHair":"13","topHair":"11","outfit":"14"},"dye":null},
+  {"id":"male-06","body":"male","parts":{"shape":"06","brows":"13","eyes":"10","nose":"02","mouth":"06","frontHair":"14","backHair":"03","topHair":"08","outfit":"08"},"dye":null},
+  {"id":"male-07","body":"male","parts":{"shape":"12","brows":"10","eyes":"08","nose":"16","mouth":"04","frontHair":"11","backHair":"15","topHair":"16","outfit":"11"},"dye":null},
+  {"id":"male-08","body":"male","parts":{"shape":"01","brows":"03","eyes":"12","nose":"10","mouth":"13","frontHair":"03","backHair":"02","topHair":"none","outfit":"10"},"dye":null},
+  {"id":"female-01","body":"female","parts":{"shape":"15","brows":"06","eyes":"12","nose":"04","mouth":"08","frontHair":"11","backHair":"11","topHair":"08","outfit":"04"},"dye":null},
+  {"id":"female-02","body":"female","parts":{"shape":"02","brows":"14","eyes":"03","nose":"08","mouth":"02","frontHair":"05","backHair":"13","topHair":"12","outfit":"02"},"dye":null},
+  {"id":"female-03","body":"female","parts":{"shape":"09","brows":"03","eyes":"15","nose":"01","mouth":"12","frontHair":"16","backHair":"02","topHair":"07","outfit":"03"},"dye":null},
+  {"id":"female-04","body":"female","parts":{"shape":"14","brows":"12","eyes":"01","nose":"13","mouth":"09","frontHair":"12","backHair":"14","topHair":"01","outfit":"10"},"dye":null},
+  {"id":"female-05","body":"female","parts":{"shape":"05","brows":"16","eyes":"09","nose":"06","mouth":"04","frontHair":"09","backHair":"12","topHair":"15","outfit":"12"},"dye":null},
+  {"id":"female-06","body":"female","parts":{"shape":"07","brows":"07","eyes":"14","nose":"09","mouth":"13","frontHair":"06","backHair":"16","topHair":"02","outfit":"16"},"dye":null},
+  {"id":"female-07","body":"female","parts":{"shape":"16","brows":"10","eyes":"05","nose":"15","mouth":"16","frontHair":"15","backHair":"01","topHair":"14","outfit":"06"},"dye":null},
+  {"id":"female-08","body":"female","parts":{"shape":"01","brows":"02","eyes":"08","nose":"02","mouth":"05","frontHair":"03","backHair":"03","topHair":"none","outfit":"11"},"dye":null}
+]
