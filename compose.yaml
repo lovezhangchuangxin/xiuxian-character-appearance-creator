@@ -11,5 +11,5 @@ services:
     image: xiuxian-editor:latest
     container_name: xiuxian-editor
     ports:
-      - "8080:80"
+      - "${EDITOR_PORT:-8080}:80"
     restart: unless-stopped

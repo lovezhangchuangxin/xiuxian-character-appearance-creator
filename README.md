@@ -24,7 +24,7 @@ pnpm build
 docker compose up -d --build
 ```
 
-访问 `http://<服务器地址>:8080` 即可，`docker compose down` 停止，`docker compose up -d --build` 重建更新。外观存档保存在访问者浏览器的 localStorage，服务端无状态，可随意重启和扩容。容器内已配置 gzip 与静态资源长缓存，无其他持久化数据。
+访问 `http://<服务器地址>:8080` 即可，`docker compose down` 停止，`docker compose up -d --build` 重建更新。宿主机端口默认 8080，被占用时用 `EDITOR_PORT=9090 docker compose up -d --build` 换端口。外观存档保存在访问者浏览器的 localStorage，服务端无状态，可随意重启和扩容。容器内已配置 gzip 与静态资源长缓存，无其他持久化数据。
 
 构建过程需访问 Docker Hub 和 npm registry。网络受限时通过环境变量把宿主代理传入构建步骤，并可固定基础镜像 digest 或指向镜像仓库（Docker Desktop 用 `host.docker.internal` 指向宿主）：
 
