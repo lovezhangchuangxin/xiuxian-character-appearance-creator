@@ -1,0 +1,15 @@
+services:
+  editor:
+    build:
+      context: .
+      args:
+        # 网络受限时覆盖为本地已有 digest 或镜像仓库地址
+        NODE_IMAGE: ${NODE_IMAGE:-node:26-alpine}
+        NGINX_IMAGE: ${NGINX_IMAGE:-nginx:alpine}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+    image: xiuxian-editor:latest
+    container_name: xiuxian-editor
+    ports:
+      - "8080:80"
+    restart: unless-stopped

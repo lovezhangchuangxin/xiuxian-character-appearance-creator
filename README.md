@@ -18,25 +18,24 @@ pnpm build
 
 ## 自托管部署
 
-仓库根目录提供 Dockerfile，多阶段构建后用内置 nginx 提供静态服务，宿主机无需安装和配置 nginx：
+仓库根目录提供 Dockerfile 与 compose.yaml，多阶段构建后用内置 nginx 提供静态服务，宿主机无需安装和配置 nginx。在仓库目录内一条命令完成构建和启动：
 
 ```sh
-docker build -t xiuxian-editor .
-docker run -d --name xiuxian-editor --restart unless-stopped -p 8080:80 xiuxian-editor
+docker compose up -d --build
 ```
 
-访问 `http://<服务器地址>:8080` 即可。外观存档保存在访问者浏览器的 localStorage，服务端无状态，可随意重启和扩容。容器内已配置 gzip 与静态资源长缓存，无其他持久化数据。
+访问 `http://<服务器地址>:8080` 即可，`docker compose down` 停止，`docker compose up -d --build` 重建更新。外观存档保存在访问者浏览器的 localStorage，服务端无状态，可随意重启和扩容。容器内已配置 gzip 与静态资源长缓存，无其他持久化数据。
 
-构建过程需访问 Docker Hub 和 npm registry。网络受限时可把宿主代理传入构建步骤（Docker Desktop 用 `host.docker.internal` 指向宿主）：
+构建过程需访问 Docker Hub 和 npm registry。网络受限时通过环境变量把宿主代理传入构建步骤，并可固定基础镜像 digest 或指向镜像仓库（Docker Desktop 用 `host.docker.internal` 指向宿主）：
 
 ```sh
-docker build \
-  --build-arg HTTP_PROXY=http://host.docker.internal:7890 \
-  --build-arg HTTPS_PROXY=http://host.docker.internal:7890 \
-  -t xiuxian-editor .
+NODE_IMAGE=node:26-alpine@sha256:<digest> \
+HTTP_PROXY=http://host.docker.internal:7890 \
+HTTPS_PROXY=http://host.docker.internal:7890 \
+docker compose up -d --build
 ```
 
-`NODE_IMAGE` 和 `NGINX_IMAGE` 构建参数可固定基础镜像 digest 或指向内网镜像仓库，例如 `--build-arg NODE_IMAGE=node:26-alpine@sha256:<digest>`。
+`NODE_IMAGE` 与 `NGINX_IMAGE` 也可用于直接 `docker build --build-arg ...`。
 
 ## 扩展入口
 
