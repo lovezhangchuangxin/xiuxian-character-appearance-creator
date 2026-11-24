@@ -44,6 +44,10 @@
     ],
     "*.{json,jsonc,html,css,scss,md,yml,yaml,toml}": [
       "oxfmt"
+    ],
+    "*.py": [
+      "uv run ruff check --fix",
+      "uv run ruff format"
     ]
   },
   "engines": {

@@ -10,6 +10,8 @@ pnpm build
 
 `pnpm build` 依次执行类型检查、运行时素材检查与 Vite 构建。`pnpm check:assets` 可单独检查素材登记，`pnpm preview` 查看构建产物。
 
+提交信息遵循 Conventional Commits，commit-msg 钩子用 commitlint 校验；pre-commit 钩子对暂存文件运行 oxlint 与 oxfmt（Python 美术脚本用 ruff），`pnpm install` 时自动安装。
+
 编辑器可保存一个当前浏览器的外观存档。使用「外观码」可复制并导入同一套体型、九个部位编号和布料染色。外观码版本与校验由 [appearanceCode.ts](./src/character/appearanceCode.ts) 定义。
 
 ## 扩展入口

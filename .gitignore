@@ -1,5 +1,31 @@
+# 依赖目录
 node_modules/
+
+# 构建产物（pnpm build 输出，入库前不需要）
 dist/
-.DS_Store
+
+# 日志与本地环境文件
+logs/
+*.log
+*.local
+
+# Python 美术工具（scripts/，虚拟环境与字节码缓存）
 __pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 编辑器与 IDE
+.idea/
+.vscode/
+*.sw?
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# AI 助手本地目录
+/.zcode/
+
+# 素材批量安装的本地工作目录
 /.feature-batch-install/
