@@ -16,6 +16,28 @@ pnpm build
 
 编辑器可保存一个当前浏览器的外观存档。使用「外观码」可复制并导入同一套体型、九个部位编号和布料染色。外观码版本与校验由 [appearanceCode.ts](./apps/editor/src/character/appearanceCode.ts) 定义。
 
+## 自托管部署
+
+仓库根目录提供 Dockerfile，多阶段构建后用内置 nginx 提供静态服务，宿主机无需安装和配置 nginx：
+
+```sh
+docker build -t xiuxian-editor .
+docker run -d --name xiuxian-editor --restart unless-stopped -p 8080:80 xiuxian-editor
+```
+
+访问 `http://<服务器地址>:8080` 即可。外观存档保存在访问者浏览器的 localStorage，服务端无状态，可随意重启和扩容。容器内已配置 gzip 与静态资源长缓存，无其他持久化数据。
+
+构建过程需访问 Docker Hub 和 npm registry。网络受限时可把宿主代理传入构建步骤（Docker Desktop 用 `host.docker.internal` 指向宿主）：
+
+```sh
+docker build \
+  --build-arg HTTP_PROXY=http://host.docker.internal:7890 \
+  --build-arg HTTPS_PROXY=http://host.docker.internal:7890 \
+  -t xiuxian-editor .
+```
+
+`NODE_IMAGE` 和 `NGINX_IMAGE` 构建参数可固定基础镜像 digest 或指向内网镜像仓库，例如 `--build-arg NODE_IMAGE=node:26-alpine@sha256:<digest>`。
+
 ## 扩展入口
 
 | 内容                   | 入口                                                                                                                        |

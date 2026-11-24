@@ -1,0 +1,31 @@
+# 版本库与本地工具链
+.git
+.github
+.zcode
+.venv
+.ruff_cache
+.editorconfig
+.oxlintrc.json
+.oxfmtrc.json
+commitlint.config.mjs
+
+# Python 美术工具链与锁定文件，构建镜像不需要
+.python-version
+pyproject.toml
+uv.lock
+
+# 依赖与产物由容器内重新生成
+node_modules
+**/node_modules
+**/dist
+
+# 构建不读取的源码与素材
+apps/editor/tests
+packages/character-assets/examples
+assets/references
+assets/prompts
+assets/source
+
+# 文档
+README.md
+AGENTS.md
