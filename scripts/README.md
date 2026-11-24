@@ -1,16 +1,15 @@
 # 离线素材工具
 
-前端开发、构建与运行使用现成的透明图层，只需要项目的 Node.js 和 pnpm。重新制作或对齐素材时才需要 Python。以下命令在仓库根目录执行，已在 Python 3.10 下验证。
+前端开发、构建与运行使用现成的透明图层，只需要项目的 Node.js 和 pnpm。重新制作或对齐素材时才需要 Python。以下命令在仓库根目录执行；Python 版本与环境用 [uv](https://docs.astral.sh/uv/) 管理，`.python-version` 固定为 3.10。
+
+首次使用安装 uv，然后在仓库根目录执行一次：
 
 ```sh
-art_venv="$(mktemp -d)"
-python3 -m venv "$art_venv"
-art_python="$art_venv/bin/python"
-"$art_python" -m pip install -r scripts/requirements-art.txt
+uv sync
 art_work="$(mktemp -d)"
 ```
 
-后续命令沿用同一终端中的 `art_python` 和 `art_work`。已配置这些依赖时，也可以直接用 `python3`。Windows 使用虚拟环境中的 `Scripts/python.exe`。本机启用 RTK 时，按项目约定为命令加 `rtk` 前缀。
+`uv sync` 按 `uv.lock` 精确重建 `.venv`，uv 会自动准备所需的 Python 3.10（无需预装）。后续命令用 `uv run python` 前缀，无需激活环境，`art_work` 沿用同一终端。无法使用 uv 时可用传统 pip 兜底：`python3 -m venv .venv && .venv/bin/pip install -r scripts/requirements-art.txt`，命令前缀换成 `.venv/bin/python`（Windows 为 `.venv\Scripts\python.exe`）；兜底方式需要系统 Python 在 3.10–3.13 范围内（依赖包 wheel 的覆盖范围）。Python 侧的检查与格式化用 ruff：`uv run ruff check scripts/`、`uv run ruff format scripts/`。本机启用 RTK 时，按项目约定为命令加 `rtk` 前缀。
 
 | 脚本                                                   | 用途                                                 | 写入位置                                                       |
 | ------------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------------------- |
@@ -29,12 +28,12 @@ art_work="$(mktemp -d)"
 `prepare` 会复制同体型的完整脸，并只留空当前部位。常用参数为 `--body male|female`、`--part brows|eyes|noses|mouths` 和 `--grid 4`。眉眼新试样可加 `--guide` 导出基础示意。复现已入库批次时使用仓库保存的载图、轮廓示意和生图原稿。[实际提示词与参考图顺序](../assets/prompts/numbered-parts.md)
 
 ```sh
-"$art_python" scripts/feature_sheet.py prepare --body male --part eyes --grid 4 \
+uv run python scripts/feature_sheet.py prepare --body male --part eyes --grid 4 \
   --blank assets/references/masters/heads/male/blank.png \
   --complete assets/references/masters/heads/male/complete.png \
   --output "$art_work/carrier.png" --guide "$art_work/guide.png"
 
-"$art_python" scripts/feature_sheet.py extract --body male --part eyes --grid 4 \
+uv run python scripts/feature_sheet.py extract --body male --part eyes --grid 4 \
   --carrier assets/source/fit-tests/faces/numbered-4x4/male/eyes/carrier.png \
   --edited assets/source/sheets/faces/male/eyes-numbered-4x4.png \
   --output "$art_work/eyes"
@@ -43,7 +42,7 @@ art_work="$(mktemp -d)"
 检查 `reassembled.png` 的整脸效果与 `reassembled-transparent.png` 的边缘，再看 `placements.json` 是否有 16 格及拒绝原因。入库命令可接收多个提取目录。它会先校验所有批次，写入失败时回滚。入库会覆盖对应体型与部位的 `01.png` 至 `16.png`，同时更新各格坐标。
 
 ```sh
-"$art_python" scripts/install-feature-batch.py "$art_work/eyes"
+uv run python scripts/install-feature-batch.py "$art_work/eyes"
 ```
 
 ## 脸型、发型和服装
@@ -51,14 +50,14 @@ art_work="$(mktemp -d)"
 以下以男修为例。女修用自己的原稿及 `--body female`。发型的 `--part` 可以是 `front`、`back` 或 `top`。先生成脸型，再重新生成需要更新试装图的服装。服装脚本使用同体型的白内搭母版和 `01` 脸型生成试装。
 
 ```sh
-"$art_python" scripts/shape-sheet.py --body male \
+uv run python scripts/shape-sheet.py --body male \
   --edited assets/source/sheets/faces/male/shapes-numbered-4x4.png \
   --output "$art_work/shapes"
 
-"$art_python" scripts/hair-sheet.py --body male --part front \
+uv run python scripts/hair-sheet.py --body male --part front \
   --sheet assets/source/sheets/hair/male/front-numbered-4x4.png
 
-"$art_python" scripts/outfit-sheet.py --body male --sheets \
+uv run python scripts/outfit-sheet.py --body male --sheets \
   assets/source/sheets/outfits/male/numbered-01-04.png \
   assets/source/sheets/outfits/male/numbered-05-08.png \
   assets/source/sheets/outfits/male/numbered-09-12.png \
@@ -75,12 +74,12 @@ art_work="$(mktemp -d)"
 ## 参考与局部试制
 
 ```sh
-"$art_python" scripts/standard_face.py --body male \
+uv run python scripts/standard_face.py --body male \
   --blank assets/references/masters/heads/male/blank.png \
   --complete assets/references/masters/heads/male/complete.png \
   --output "$art_work/standard"
 
-"$art_python" scripts/eye_sheet.py prepare --body male --columns 2 --rows 2 \
+uv run python scripts/eye_sheet.py prepare --body male --columns 2 --rows 2 \
   --blank assets/references/masters/heads/male/blank.png \
   --complete assets/references/masters/heads/male/complete.png \
   --output "$art_work/eye-trial.png"

@@ -1,3 +1,4 @@
+# 与根目录 pyproject.toml 的 dependencies 保持同步：pyproject + uv.lock 是唯一事实来源，本文件仅作无 uv 时的 pip 兜底。
 numpy==2.2.6
 Pillow==12.2.0
 scipy==1.15.3
