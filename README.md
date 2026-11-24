@@ -1,6 +1,6 @@
 # 修仙角色外观
 
-使用 Vite、Vue 3、TypeScript 和 PixiJS 的 2D 捏脸与换装样机。浏览器需支持 WebGL。开发和 CI 使用 Node.js 24（见 `.nvmrc`），以及 `package.json` 声明的 pnpm 版本。使用 nvm 时可在仓库根目录运行 `nvm use`。
+使用 Vite、Vue 3、TypeScript 和 PixiJS 的 2D 捏脸与换装样机。浏览器需支持 WebGL。开发和 CI 使用 Node.js 26（版本要求见 `package.json` 的 `engines` 字段），以及 `package.json` 声明的 pnpm 版本。
 
 ```sh
 pnpm install --frozen-lockfile
