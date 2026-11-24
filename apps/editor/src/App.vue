@@ -17,17 +17,28 @@ import { decodeAppearance, encodeAppearance, savedAppearanceKey } from "./charac
 
 const appearance = ref(makeAppearance("female"));
 const locked = ref<Slot[]>([]);
-const locksVisible = ref(false);
 const group = ref(groups[0]);
-const view = ref<"full" | "portrait">("full");
+const activeSlots = ref<Record<string, Slot>>(
+  Object.fromEntries(groups.map((entry) => [entry.id, entry.slots[0]])),
+);
 const announcement = ref("");
 const labels = Object.fromEntries(slots.map((slot) => [slot.id, slot.label]));
 const outfit = computed(() => selectedPart(appearance.value, "outfit"));
+const canvas = ref<InstanceType<typeof CharacterCanvas>>();
 const codeVisible = ref(false);
 const codeInput = ref<HTMLInputElement>();
 const codeText = ref("");
 const saveFeedback = ref("");
 const hasSavedAppearance = ref(false);
+
+const activeSlot = computed(() => activeSlots.value[group.value.id]);
+const activeLocked = computed(() => locked.value.includes(activeSlot.value));
+const gridParts = computed(() => {
+  const list = options(activeSlot.value, appearance.value.body);
+  const none = list.find((part) => part.id === "none");
+  const rest = list.filter((part) => part.id !== "none");
+  return none ? [none, ...rest] : rest;
+});
 
 function syncSavedAppearance() {
   try {
@@ -108,7 +119,10 @@ function chooseBody(body: Body) {
 
 function chooseGroup(next: typeof group.value) {
   group.value = next;
-  view.value = next.view;
+}
+
+function chooseSlot(slot: Slot) {
+  activeSlots.value[group.value.id] = slot;
 }
 
 function choosePart(slot: Slot, id: string) {
@@ -148,12 +162,6 @@ function randomize() {
   };
   announcement.value = "已随机组合未锁定的部件";
 }
-
-function preset(style: "calm" | "wandering") {
-  appearance.value = makeAppearance(appearance.value.body, style);
-  view.value = "full";
-  announcement.value = style === "calm" ? "已应用清修预设" : "已应用游历预设";
-}
 </script>
 
 <template>
@@ -171,14 +179,20 @@ function preset(style: "calm" | "wandering") {
 
     <div class="workspace">
       <section class="stage" aria-label="预览">
-        <div class="stage-controls segmented" role="group" aria-label="预览范围">
-          <button type="button" :aria-pressed="view === 'full'" @click="view = 'full'">全身</button>
-          <button type="button" :aria-pressed="view === 'portrait'" @click="view = 'portrait'">
-            近景
+        <div class="stage-orbit" aria-hidden="true"></div>
+        <CharacterCanvas ref="canvas" :appearance="appearance" />
+        <div class="canvas-tools" role="group" aria-label="视角控制">
+          <button type="button" aria-label="缩小" title="缩小" @click="canvas?.zoomStep(-1)">
+            −
+          </button>
+          <button type="button" title="还原视角（双击画面同样生效）" @click="canvas?.resetView()">
+            还原
+          </button>
+          <button type="button" aria-label="放大" title="放大" @click="canvas?.zoomStep(1)">
+            ＋
           </button>
         </div>
-        <div class="stage-orbit" aria-hidden="true"></div>
-        <CharacterCanvas :appearance="appearance" :view="view" />
+        <p class="stage-hint" aria-hidden="true">拖拽平移 · 滚轮缩放 · 双击还原</p>
         <div class="stage-caption">
           <span class="caption-rule" aria-hidden="true"></span>
           <span>{{ outfit.id === "none" ? outfit.label : `服装 ${outfit.label}` }}</span>
@@ -202,14 +216,7 @@ function preset(style: "calm" | "wandering") {
               </button>
             </div>
           </div>
-          <div class="panel-row presets">
-            <h2>预设</h2>
-            <div class="preset-buttons">
-              <button type="button" @click="preset('calm')">清修</button>
-              <button type="button" @click="preset('wandering')">游历</button>
-            </div>
-          </div>
-          <div class="preset-buttons save-actions" role="group" aria-label="外观存档">
+          <div class="action-row save-actions" role="group" aria-label="外观存档">
             <button type="button" @click="saveAppearance">保存外观</button>
             <button type="button" :disabled="!hasSavedAppearance" @click="loadAppearance">
               读取存档
@@ -241,7 +248,7 @@ function preset(style: "calm" | "wandering") {
               autocomplete="off"
               autocapitalize="off"
             />
-            <div class="preset-buttons">
+            <div class="action-row">
               <button type="button" @click="copyAppearance">复制当前外观码</button>
               <button type="submit">导入外观码</button>
             </div>
@@ -261,40 +268,63 @@ function preset(style: "calm" | "wandering") {
           </button>
         </nav>
 
+        <div class="slot-row">
+          <div class="slot-chips" role="group" :aria-label="`${group.label}部位`">
+            <button
+              v-for="slot in group.slots"
+              :key="slot"
+              type="button"
+              class="slot-chip"
+              :aria-pressed="activeSlot === slot"
+              @click="chooseSlot(slot)"
+            >
+              {{ labels[slot] }}
+              <span v-if="locked.includes(slot)" class="chip-lock" title="随机时保留该部位">
+                锁
+              </span>
+            </button>
+          </div>
+          <button
+            type="button"
+            class="lock-toggle"
+            :aria-pressed="activeLocked"
+            title="随机组合时保留当前部位"
+            @click="toggleLock(activeSlot)"
+          >
+            {{ activeLocked ? "已锁定" : "锁定" }}
+          </button>
+        </div>
+
         <div class="part-panel">
-          <fieldset v-for="slot in group.slots" :key="slot" class="part-group">
-            <legend>{{ labels[slot] }}</legend>
+          <fieldset class="part-group">
+            <legend>{{ labels[activeSlot] }}</legend>
             <div class="part-grid">
               <button
-                v-for="part in options(slot, appearance.body).filter((part) => part.id !== 'none')"
+                v-for="part in gridParts"
                 :key="part.id"
                 type="button"
                 class="part"
-                :class="{ 'has-preview': part.image, 'outfit-part': slot === 'outfit' }"
-                :aria-pressed="appearance.parts[slot] === part.id"
-                @click="choosePart(slot, part.id)"
+                :class="{
+                  'has-preview': part.image && part.id !== 'none',
+                  'outfit-part': activeSlot === 'outfit' && part.id !== 'none',
+                }"
+                :aria-pressed="appearance.parts[activeSlot] === part.id"
+                @click="choosePart(activeSlot, part.id)"
               >
                 <img
-                  v-if="part.image"
+                  v-if="part.image && part.id !== 'none'"
                   :src="spriteUrl(part.thumbnail ?? part.image)"
                   alt=""
                   draggable="false"
                 />
-                <span>{{ part.label }}</span>
+                <span>{{
+                  part.id === "none" ? (activeSlot === "outfit" ? "内搭" : "无") : part.label
+                }}</span>
               </button>
             </div>
-            <button
-              v-if="options(slot, appearance.body).some((part) => part.id === 'none')"
-              type="button"
-              class="part part-clear"
-              :aria-pressed="appearance.parts[slot] === 'none'"
-              @click="choosePart(slot, 'none')"
-            >
-              {{ slot === "outfit" ? "内搭" : "无" }}
-            </button>
           </fieldset>
 
-          <fieldset v-if="group.id === 'outfit' && outfit.dyeable" class="part-group">
+          <fieldset v-if="activeSlot === 'outfit' && outfit.dyeable" class="part-group">
             <legend>布料颜色</legend>
             <div class="swatches">
               <button
@@ -309,28 +339,6 @@ function preset(style: "calm" | "wandering") {
               </button>
             </div>
           </fieldset>
-        </div>
-
-        <div class="lock-panel">
-          <button
-            type="button"
-            class="lock-toggle"
-            :aria-expanded="locksVisible"
-            aria-controls="locked-parts"
-            @click="locksVisible = !locksVisible"
-          >
-            随机时锁定部件<span v-if="locked.length">（{{ locked.length }}）</span>
-          </button>
-          <div id="locked-parts" v-show="locksVisible" class="lock-options">
-            <label v-for="slot in slots" :key="slot.id">
-              <input
-                type="checkbox"
-                :checked="locked.includes(slot.id)"
-                @change="toggleLock(slot.id)"
-              />
-              {{ slot.label }}
-            </label>
-          </div>
         </div>
       </aside>
     </div>

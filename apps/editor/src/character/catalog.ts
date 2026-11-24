@@ -4,7 +4,7 @@ export type Body = keyof typeof manifest.bodies;
 export type Slot = keyof (typeof manifest.bodies)["female"]["parts"];
 export type Appearance = { body: Body; parts: Record<Slot, string>; dye: string | null };
 type Rect = { x: number; y: number; width: number; height: number };
-type Part = {
+export type Part = {
   id: string;
   label: string;
   image: string | null;
@@ -31,15 +31,10 @@ export function makeAppearance(body: Body, style: "calm" | "wandering" = "calm")
   return { body, parts: { ...bodies[body].presets[style] }, dye: null };
 }
 
-export const groups: { id: string; label: string; slots: Slot[]; view: "portrait" | "full" }[] = [
-  {
-    id: "face",
-    label: "五官",
-    slots: ["shape", "brows", "eyes", "nose", "mouth"],
-    view: "portrait",
-  },
-  { id: "hair", label: "发型", slots: ["frontHair", "backHair", "topHair"], view: "portrait" },
-  { id: "outfit", label: "服装", slots: ["outfit"], view: "full" },
+export const groups: { id: string; label: string; slots: Slot[] }[] = [
+  { id: "face", label: "五官", slots: ["shape", "brows", "eyes", "nose", "mouth"] },
+  { id: "hair", label: "发型", slots: ["frontHair", "backHair", "topHair"] },
+  { id: "outfit", label: "服装", slots: ["outfit"] },
 ];
 
 export const dyeColors = [
