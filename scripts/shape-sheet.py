@@ -49,13 +49,14 @@ def extend_neck(shape, neck):
     width = shape.width
     # Use a row below the jaw shadow and above the original undergarment.
     join = neck + 20
-    source = shape.crop((0, join - 4, width, join))
-    source = source.resize((width, 1), Image.Resampling.BOX)
+    source = shape.crop((0, join - 1, width, join))
     left, _, right, _ = source.getchannel("A").getbbox()
+    radius = (right - left) / 2
     center = (left + right) / 2
-    source_rgba = np.asarray(source)[0]
-    skin = np.median(source_rgba[source_rgba[:, 3] > 240, :3], axis=0)
-    chest_light = np.clip(skin + [9, 12, 13], 0, 255)
+    # Sample bare skin between the original undergarment's lapels.
+    middle = round(center)
+    chest = np.asarray(shape.crop((middle - 10, 600, middle + 10, 616)))
+    chest_light = np.median(chest[..., :3], axis=(0, 1))
     new = Image.new("RGBA", (width, SHAPE_HEIGHT))
     new.paste(shape.crop((0, 0, width, join)), (0, 0))
     for y in range(join, SHAPE_HEIGHT):
@@ -69,12 +70,12 @@ def extend_neck(shape, neck):
             Image.Resampling.BICUBIC,
         )
         pixels = np.array(scanline)
-        # Let the jaw shadow ease into the lighter skin under the collar.
-        inner = 1 - ramp(np.abs(np.arange(width) - center), 45 * scale, 95 * scale)
-        weight = (inner * float(ramp(distance, 0, 115)))[None, :, None]
-        pixels[..., :3] = (
-            pixels[..., :3] * (1 - weight) + chest_light * weight
-        ).round()
+        # Replace the repeated highlights with a broad skin gradient while keeping
+        # the side outlines and the exact sampled row at the join.
+        edge = np.abs(np.arange(width) - center) / (radius * scale)
+        tint = chest_light - ramp(edge, 0.15, 0.90)[:, None] * [13, 22, 24]
+        weight = ((1 - ramp(edge, 0.73, 0.93)) * ramp(distance, 0, 58))[None, :, None]
+        pixels[..., :3] = (pixels[..., :3] * (1 - weight) + tint * weight).round()
         # Fade away below even the deepest opening.
         opacity = 1 - float(ramp(y, SHAPE_HEIGHT - 42, SHAPE_HEIGHT - 1))
         pixels[..., 3] = (pixels[..., 3] * opacity).round()

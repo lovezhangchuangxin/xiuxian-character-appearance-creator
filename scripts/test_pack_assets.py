@@ -104,6 +104,33 @@ class AssetArchiveTest(unittest.TestCase):
             self.assertIsNone(archive.testzip())
             self.assertIn("examples/references/female.png", archive.namelist())
 
+    def test_reference_applies_top_hair_offset_with_no_front_hair(self):
+        self.manifest["layers"] = ["frontHair", "topHair"]
+        body = self.manifest["bodies"]["female"]
+        body["parts"] = {
+            "frontHair": [{"id": "none", "image": None}],
+            "topHair": [self.part],
+        }
+        body["topHairOffsets"] = {"none": 2}
+        self.write_manifest()
+        (self.package / "examples/cases.json").write_text(
+            json.dumps(
+                [
+                    {
+                        "id": "female",
+                        "body": "female",
+                        "parts": {"frontHair": "none", "topHair": "01"},
+                    }
+                ]
+            ),
+            encoding="utf-8",
+        )
+
+        refreshed = self.run_pack("--refresh-references")
+        self.assertEqual(refreshed.returncode, 0, refreshed.stderr)
+        with Image.open(self.package / "examples/references/female.png") as image:
+            self.assertEqual(image.getchannel("A").getbbox(), (0, 2, 2, 4))
+
     def test_rejects_undecodable_thumbnail(self):
         path = self.part["thumbnail"]
         (self.root / "assets" / path).write_bytes(b"not a WebP")

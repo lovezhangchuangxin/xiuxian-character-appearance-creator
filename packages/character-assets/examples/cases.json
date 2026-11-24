@@ -58,5 +58,20 @@
       "topHair": "none",
       "outfit": "none"
     }
+  },
+  {
+    "id": "male-bare-crown",
+    "body": "male",
+    "parts": {
+      "shape": "13",
+      "brows": "16",
+      "eyes": "05",
+      "nose": "04",
+      "mouth": "08",
+      "frontHair": "none",
+      "backHair": "06",
+      "topHair": "07",
+      "outfit": "10"
+    }
   }
 ]

@@ -11,8 +11,8 @@
     "id": "02",
     "source": "numbered-01-04.png",
     "wrist": {
-      "left": [345, 772],
-      "right": [679, 772]
+      "left": [346, 772],
+      "right": [678, 772]
     }
   },
   {
@@ -27,7 +27,7 @@
     "id": "04",
     "source": "numbered-01-04.png",
     "wrist": {
-      "left": [346, 748],
+      "left": [347, 748],
       "right": [678, 747]
     }
   },
@@ -35,8 +35,8 @@
     "id": "05",
     "source": "numbered-05-08.png",
     "wrist": {
-      "left": [307, 788],
-      "right": [717, 788]
+      "left": [306, 788],
+      "right": [721, 788]
     }
   },
   {
@@ -51,7 +51,7 @@
     "id": "07",
     "source": "numbered-05-08.png",
     "wrist": {
-      "left": [344, 734],
+      "left": [345, 734],
       "right": [677, 733]
     }
   },
@@ -60,7 +60,7 @@
     "source": "numbered-05-08.png",
     "wrist": {
       "left": [316, 749],
-      "right": [708, 749]
+      "right": [709, 749]
     }
   },
   {

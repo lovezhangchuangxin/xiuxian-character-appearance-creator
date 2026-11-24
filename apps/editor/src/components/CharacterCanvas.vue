@@ -266,6 +266,9 @@ async function render() {
       buildSlot(slot, part, images[index], appearance.dye);
     }
 
+    const offsets: Record<string, number> = bodies[appearance.body].topHairOffsets;
+    slotLayers.get("topHair")?.position.set(0, offsets[appearance.parts.frontHair] ?? 0);
+
     renderedBody = appearance.body;
     renderedDye = appearance.dye;
     if (character) character.visible = true;

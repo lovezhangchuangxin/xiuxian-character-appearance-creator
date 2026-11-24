@@ -3,7 +3,7 @@
     "id": "01",
     "source": "numbered-01-04.png",
     "wrist": {
-      "left": [258, 705],
+      "left": [256, 705],
       "right": [766, 701]
     }
   },
@@ -19,24 +19,24 @@
     "id": "03",
     "source": "numbered-01-04.png",
     "wrist": {
-      "left": [306, 695],
-      "right": [721, 695]
+      "left": [308, 695],
+      "right": [713, 695]
     }
   },
   {
     "id": "04",
     "source": "numbered-01-04.png",
     "wrist": {
-      "left": [308, 705],
-      "right": [716, 704]
+      "left": [311, 705],
+      "right": [714, 704]
     }
   },
   {
     "id": "05",
     "source": "numbered-05-08.png",
     "wrist": {
-      "left": [303, 701],
-      "right": [722, 701]
+      "left": [304, 701],
+      "right": [721, 701]
     }
   },
   {
@@ -59,8 +59,8 @@
     "id": "08",
     "source": "numbered-05-08.png",
     "wrist": {
-      "left": [234, 684],
-      "right": [796, 675]
+      "left": [243, 684],
+      "right": [787, 675]
     }
   },
   {
@@ -75,8 +75,8 @@
     "id": "10",
     "source": "numbered-09-12.png",
     "wrist": {
-      "left": [288, 728],
-      "right": [733, 728]
+      "left": [292, 728],
+      "right": [730, 728]
     }
   },
   {
@@ -91,8 +91,8 @@
     "id": "12",
     "source": "numbered-09-12.png",
     "wrist": {
-      "left": [291, 706],
-      "right": [725, 715]
+      "left": [296, 706],
+      "right": [722, 715]
     }
   },
   {
@@ -123,8 +123,8 @@
     "id": "16",
     "source": "numbered-13-16.png",
     "wrist": {
-      "left": [257, 664],
-      "right": [757, 638]
+      "left": [264, 664],
+      "right": [748, 638]
     }
   }
 ]

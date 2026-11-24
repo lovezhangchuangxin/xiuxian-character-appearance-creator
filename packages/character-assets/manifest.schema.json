@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Xiuxian character asset manifest v1",
+  "title": "Xiuxian character asset manifest v2",
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "packId": {
       "const": "xiuxian-character-assets"
@@ -247,6 +247,14 @@
           "required": ["calm", "wandering"],
           "additionalProperties": false
         },
+        "topHairOffsets": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/partId" },
+          "additionalProperties": { "type": "integer" },
+          "required": ["none"],
+          "minProperties": 17,
+          "maxProperties": 17
+        },
         "parts": {
           "type": "object",
           "properties": {
@@ -337,7 +345,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["label", "views", "presets", "parts"],
+      "required": ["label", "views", "presets", "parts", "topHairOffsets"],
       "additionalProperties": false
     }
   }

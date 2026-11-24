@@ -11,15 +11,15 @@ art_work="$(mktemp -d)"
 
 `uv sync` 按 `uv.lock` 精确重建 `.venv`，uv 会自动准备所需的 Python 3.10（无需预装）。后续命令用 `uv run python` 前缀，无需激活环境，`art_work` 沿用同一终端。无法使用 uv 时可用传统 pip 兜底：`python3 -m venv .venv && .venv/bin/pip install -r scripts/requirements-art.txt`，命令前缀换成 `.venv/bin/python`（Windows 为 `.venv\Scripts\python.exe`）；兜底方式需要系统 Python 在 3.10–3.13 范围内（依赖包 wheel 的覆盖范围）。Python 侧的检查与格式化用 ruff：`uv run ruff check scripts/`、`uv run ruff format scripts/`。本机启用 RTK 时，按项目约定为命令加 `rtk` 前缀。
 
-| 脚本                                                   | 用途                                                 | 写入位置                                                                          |
-| ------------------------------------------------------ | ---------------------------------------------------- | --------------------------------------------------------------------------------- |
-| [feature_sheet.py](./feature_sheet.py)                 | 制作五官留空载图，从编辑后的网格提取透明裁片并回贴   | `--output`                                                                        |
-| [install-feature-batch.py](./install-feature-batch.py) | 校验并按原稿顺序安装一组或多组完整 4 × 4 五官裁片    | `assets/sprites/faces/` 和 `packages/character-assets/source/numbered-faces.json` |
-| [shape-sheet.py](./shape-sheet.py)                     | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部     | 正式脸型 PNG、脸型缩略图，以及 `--output` 中的定位和验收图                        |
-| [hair-sheet.py](./hair-sheet.py)                       | 按透明轮廓拆成 16 张前发、后发或发髻，计算摆放参数   | `assets/sprites/hair/` 和 `packages/character-assets/source/numbered-hair.json`   |
-| [outfit-sheet.py](./outfit-sheet.py)                   | 合并四张服装原稿，匹配领口和袖口，生成套装与缩略图   | 正式服装 PNG、WebP 缩略图，以及 `--output` 中的试装和定位数据                     |
-| [standard_face.py](./standard_face.py)                 | 从同体型完整脸和空脸拆出一张标准脸的四个部件         | `--output` 中的各部件、坐标和对照图                                               |
-| [eye_sheet.py](./eye_sheet.py)                         | 提供对位、差分和透明处理函数，也保留独立眼睛试样命令 | 独立运行时只写 `--output`                                                         |
+| 脚本                                                   | 用途                                                         | 写入位置                                                                          |
+| ------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [feature_sheet.py](./feature_sheet.py)                 | 制作五官留空载图，从编辑后的网格提取透明裁片并回贴           | `--output`                                                                        |
+| [install-feature-batch.py](./install-feature-batch.py) | 校验并按原稿顺序安装一组或多组完整 4 × 4 五官裁片            | `assets/sprites/faces/` 和 `packages/character-assets/source/numbered-faces.json` |
+| [shape-sheet.py](./shape-sheet.py)                     | 对齐 16 个脸型，保留耳位和五官锚点，延伸连续颈部             | 正式脸型 PNG、脸型缩略图，以及 `--output` 中的定位和验收图                        |
+| [hair-sheet.py](./hair-sheet.py)                       | 按透明轮廓拆成 16 张前发、后发或发髻，测量前发发冠和发髻根部 | `assets/sprites/hair/` 和 `packages/character-assets/source/numbered-hair.json`   |
+| [outfit-sheet.py](./outfit-sheet.py)                   | 合并四张服装原稿，匹配领口和袖口，生成套装与缩略图           | 正式服装 PNG、WebP 缩略图，以及 `--output` 中的试装和定位数据                     |
+| [standard_face.py](./standard_face.py)                 | 从同体型完整脸和空脸拆出一张标准脸的四个部件                 | `--output` 中的各部件、坐标和对照图                                               |
+| [eye_sheet.py](./eye_sheet.py)                         | 提供对位、差分和透明处理函数，也保留独立眼睛试样命令         | 独立运行时只写 `--output`                                                         |
 
 会写入正式素材的脚本基于脚本文件所在的仓库定位输出。`--output` 只控制试装或中间文件位置。试跑入库、脸型、发型和服装时可用独立工作树，方便比较生成前后的差异。
 
@@ -47,7 +47,7 @@ uv run python scripts/install-feature-batch.py "$art_work/eyes"
 
 ## 脸型、发型和服装
 
-以下以男修为例。女修用自己的原稿及 `--body female`。发型的 `--part` 可以是 `front`、`back` 或 `top`。先生成脸型，再重新生成需要更新试装图的服装。服装脚本使用同体型的白内搭母版和 `01` 脸型生成试装。
+以下以男修为例。女修用自己的原稿及 `--body female`。发型的 `--part` 可以是 `front`、`back` 或 `top`。前发与发髻的摆放参数包含从透明轮廓测得的接点，生成素材清单时用于定位发髻。先生成脸型，再重新生成需要更新试装图的服装。服装脚本使用同体型的白内搭母版和 `01` 脸型生成试装。
 
 ```sh
 uv run python scripts/shape-sheet.py --body male \

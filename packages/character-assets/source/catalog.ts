@@ -21,6 +21,7 @@ export type Part<B extends Body = Body> = {
   height?: number;
   dx?: number;
   dy?: number;
+  hairAnchor?: number;
   headOffset?: [x: number, y: number];
   dyeable?: boolean;
 };
@@ -97,8 +98,17 @@ type HairPart = keyof (typeof hairPlacements)["female"];
 
 function numberedHair<B extends Body>(body: B, part: HairPart): Part<B>[] {
   const pieces = numberedParts<B>((id, index) => {
-    const [width, height, dx, dy] = hairPlacements[body][part][index];
-    return { id, label: id, sprite: `hair/${body}/${part}/${id}.png`, width, height, dx, dy };
+    const [width, height, dx, dy, hairAnchor] = hairPlacements[body][part][index];
+    return {
+      id,
+      label: id,
+      sprite: `hair/${body}/${part}/${id}.png`,
+      width,
+      height,
+      dx,
+      dy,
+      hairAnchor,
+    };
   });
   return [...pieces, none];
 }

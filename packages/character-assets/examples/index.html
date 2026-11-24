@@ -76,11 +76,15 @@
         status.textContent = "正在加载素材…";
         try {
           const appearance = cases[caseSelect.selectedIndex];
-          const { parts } = manifest.bodies[appearance.body];
+          const { parts, topHairOffsets } = manifest.bodies[appearance.body];
+          const topHairOffset = topHairOffsets?.[appearance.parts.frontHair] ?? 0;
           const layers = await Promise.all(
             manifest.layers.map(async (slot) => {
               const part = parts[slot].find((choice) => choice.id === appearance.parts[slot]);
-              return part.image ? { ...part, bitmap: await loadImage(part.image) } : null;
+              if (!part.image) return null;
+              const rect =
+                slot === "topHair" ? { ...part.rect, y: part.rect.y + topHairOffset } : part.rect;
+              return { ...part, rect, bitmap: await loadImage(part.image) };
             }),
           );
           if (revision !== id) return;

@@ -58,6 +58,12 @@ for (const [body, profile] of Object.entries(bodies)) {
           errors.push(`Invalid or incomplete WebP: thumbnails/${path}`);
         }
       }
+      if (
+        (slot === "frontHair" || slot === "topHair") &&
+        !(Number.isFinite(part.hairAnchor) && part.hairAnchor >= 0 && part.hairAnchor <= 1)
+      ) {
+        errors.push(`Missing or invalid hair attachment: ${part.sprite}`);
+      }
       if (isFaceSlot && !part.headOffset) {
         errors.push(`Missing reference coordinates: ${part.sprite}`);
       }

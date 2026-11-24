@@ -47,7 +47,7 @@ export function writeManifest({
       const height = part.height ?? size.height;
       rect = {
         x: profile.center + (part.dx ?? 0) - width / 2,
-        y: profile.crown + (part.dy ?? 0) - (slot === "topHair" ? height / 2 : 0),
+        y: profile.crown + (part.dy ?? 0),
         width,
         height,
       };
@@ -70,33 +70,50 @@ export function writeManifest({
   }
 
   const manifest = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     packId: "xiuxian-character-assets",
     packVersion: metadata.version,
     canvas,
     slots,
     layers,
     bodies: Object.fromEntries(
-      Object.entries(bodies).map(([body, profile]) => [
-        body,
-        {
-          label: profile.label,
-          views: {
-            full: { x: profile.center, y: profile.ground - 753, width: 720, height: 1595 },
-            portrait: { x: profile.center, y: profile.crown + 101, width: 350, height: 365 },
+      Object.entries(bodies).map(([body, profile]) => {
+        const parts = Object.fromEntries(
+          slots.map(({ id }) => [
+            id,
+            options(id, body).map((part) => partEntry(part, id, profile)),
+          ]),
+        );
+        const crowns = options("frontHair", body).map((part, index) => {
+          const { rect } = parts.frontHair[index];
+          // Overlap the root with the visible cap or bare scalp.
+          return rect ? rect.y + rect.height * part.hairAnchor + 12 : profile.crown + 9;
+        });
+        const referenceCrown = crowns[0];
+        options("topHair", body).forEach((part, index) => {
+          const { rect } = parts.topHair[index];
+          if (rect) rect.y = Math.round(referenceCrown - rect.height * part.hairAnchor);
+        });
+        const topHairOffsets = Object.fromEntries(
+          parts.frontHair.map(({ id }, index) => [id, Math.round(crowns[index] - referenceCrown)]),
+        );
+        return [
+          body,
+          {
+            label: profile.label,
+            views: {
+              full: { x: profile.center, y: profile.ground - 753, width: 720, height: 1595 },
+              portrait: { x: profile.center, y: profile.crown + 101, width: 350, height: 365 },
+            },
+            presets: {
+              calm: makeAppearance(body, "calm").parts,
+              wandering: makeAppearance(body, "wandering").parts,
+            },
+            parts,
+            topHairOffsets,
           },
-          presets: {
-            calm: makeAppearance(body, "calm").parts,
-            wandering: makeAppearance(body, "wandering").parts,
-          },
-          parts: Object.fromEntries(
-            slots.map(({ id }) => [
-              id,
-              options(id, body).map((part) => partEntry(part, id, profile)),
-            ]),
-          ),
-        },
-      ]),
+        ];
+      }),
     ),
   };
 

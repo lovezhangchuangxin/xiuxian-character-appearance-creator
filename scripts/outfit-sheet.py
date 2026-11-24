@@ -22,7 +22,7 @@ FIT = {
         "neck": 324,
         "wrist": 766,
         "left": (294, 386),
-        "right": (638, 737),
+        "right": (643, 737),
         "finger": 903,
     },
 }
@@ -45,7 +45,7 @@ def contour_collar(art, center):
         return art
     y = np.arange(height)[:, None]
     curve = np.maximum(0, 1 - ((x - center) / 43) ** 2) ** 2
-    displacement = 7 * curve * (1 - y / (height - 1)) ** 2
+    displacement = 14 * curve * (1 - y / (height - 1)) ** 2
     source_y = y - displacement
     lower = np.floor(np.maximum(0, source_y)).astype(int)
     fraction = np.maximum(0, source_y) - lower
@@ -146,9 +146,31 @@ def preserve_skin(base, fit, side):
     return clean_alpha(Image.fromarray(rgba))
 
 
+def fit_wrist(hand, sleeve, left, top):
+    # Center the upper wrist behind the cuff. An exposed strip here shows the
+    # straight crop where the forearm was cut from the body master.
+    height = 18
+    travel = 12
+    wrist = np.asarray(hand.getchannel("A"))[:height] / 255
+    cuff = (
+        np.asarray(
+            sleeve.crop((left - travel, top, left + hand.width + travel, top + height))
+        )
+        / 255
+    )
+    exposed = [
+        np.sum(wrist * (1 - cuff[:, x : x + hand.width])) / wrist.sum()
+        for x in range(2 * travel + 1)
+    ]
+    return min(
+        range(-travel, travel + 1), key=lambda dx: exposed[dx + travel] + 0.01 * abs(dx)
+    )
+
+
 def finish(overlay, base, fit, override):
     worn = Image.new("RGBA", SIZE)
     wrists = {}
+    sleeve = overlay.getchannel("A")
     for side in ("left", "right"):
         hand = preserve_skin(base, fit, side)
         wrist = bounds_of(hand.getchannel("A").crop((0, 0, hand.width, 25)))
@@ -156,8 +178,14 @@ def finish(overlay, base, fit, override):
             raise ValueError(f"Missing the {side} wrist in the base.")
         x, y = override.get(side) or wrist_position(overlay, fit, side)
         wrist_middle = (wrist[0] + wrist[2]) // 2
-        worn.alpha_composite(hand, (x - wrist_middle, y - 32))
-        wrists[side] = [x, y]
+        left, top = x - wrist_middle, y - 32
+        dx = 0 if side in override else fit_wrist(hand, sleeve, left, top)
+        # Feather any remaining exposed edge above the wrist without touching the palm.
+        alpha = np.array(hand.getchannel("A"))
+        alpha[:12] = (alpha[:12] * np.linspace(0, 1, 12)[:, None]).round()
+        hand.putalpha(Image.fromarray(alpha))
+        worn.alpha_composite(hand, (left + dx, top))
+        wrists[side] = [x + dx, y]
     worn.alpha_composite(overlay)
     return clean_alpha(worn), wrists
 

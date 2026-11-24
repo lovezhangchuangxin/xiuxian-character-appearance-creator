@@ -18,7 +18,8 @@ REFERENCE_SIGNATURES = EXAMPLES / "references.json"
 
 
 def reference_inputs(manifest, example):
-    part_options = manifest["bodies"][example["body"]]["parts"]
+    body = manifest["bodies"][example["body"]]
+    part_options = body["parts"]
     if set(example["parts"]) != set(part_options):
         raise ValueError(f"Invalid example selection {example['id']}")
 
@@ -36,6 +37,11 @@ def reference_inputs(manifest, example):
             raise ValueError(f"Invalid example selection {example['id']}: {slot}")
         if choice["image"] is not None:
             layer = {"image": choice["image"], "rect": choice["rect"]}
+            if slot == "topHair":
+                y_offset = body.get("topHairOffsets", {}).get(
+                    example["parts"]["frontHair"], 0
+                )
+                layer["rect"] = {**choice["rect"], "y": choice["rect"]["y"] + y_offset}
             if "clip" in choice:
                 layer["clip"] = choice["clip"]
             layers.append(layer)

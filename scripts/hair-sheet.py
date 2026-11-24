@@ -12,6 +12,8 @@ from scipy.ndimage import find_objects, label, maximum_filter
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "packages/character-assets/source/numbered-hair.json"
 PARTS = ("front", "back", "top")
+# These two male top pieces sweep to one side of the actual tied root.
+SIDE_ROOTS = {("male", 11): 0.81, ("male", 12): 0.18}
 
 
 def pieces_in_sheet(sheet):
@@ -41,6 +43,19 @@ def pieces_in_sheet(sheet):
         yield clean_alpha(Image.fromarray(area))
 
 
+def attachment_y(piece, part, center_x=0.5):
+    alpha = np.asarray(piece.getchannel("A"))
+    left = round(piece.width * (center_x - 0.12))
+    right = round(piece.width * (center_x + 0.12))
+    center = alpha[:, left:right]
+    # Read the solid cap/root near the center, away from loose strands at the edges.
+    rows = np.flatnonzero((center > 128).mean(axis=1) > 0.4)
+    if not rows.size:
+        raise ValueError(f"No solid attachment found for {part} hair.")
+    edge = rows[0] if part == "front" else rows[-1] + 1
+    return round(edge / piece.height, 4)
+
+
 def placement(piece, index, body, part):
     aspect = piece.width / piece.height
     row, col = divmod(index, 4)
@@ -53,7 +68,7 @@ def placement(piece, index, body, part):
         if center_depth.size:
             usable_height = 102 * piece.height / max(center_depth[-1], 1)
             height = min(height, round(usable_height))
-        return [width, height, 0, -26]
+        return [width, height, 0, -26, attachment_y(piece, part)]
 
     if part == "back":
         heights = (
@@ -75,11 +90,14 @@ def placement(piece, index, body, part):
 
     width = (71, 67, 76, 72)[row] + (0, 4, -3, 5)[col]
     height = round(np.clip(width / aspect, 28, 57))
-    alpha = np.asarray(piece.getchannel("A"))
-    center = alpha[:, round(piece.width * 0.35) : round(piece.width * 0.65)] > 110
-    connected = np.flatnonzero(center.mean(axis=1) > 0.25)
-    join = connected[-1] / piece.height if connected.size else 1
-    return [width, height, 0, round(-12 + (0.5 - join) * height)]
+    root_x = SIDE_ROOTS.get((body, index + 1), 0.5)
+    return [
+        width,
+        height,
+        round(width * (0.5 - root_x)),
+        0,
+        attachment_y(piece, part, root_x),
+    ]
 
 
 def main():
