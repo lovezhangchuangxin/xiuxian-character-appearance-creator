@@ -1,29 +1,53 @@
 {
   "name": "xiuxian-character-appearance-creator",
   "version": "0.1.0",
+  "private": true,
   "description": "2D 修仙角色外观编辑器",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "typecheck": "vue-tsc --noEmit",
     "check:assets": "node scripts/check-assets.mjs",
     "build": "pnpm typecheck && pnpm check:assets && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "prepare": "simple-git-hooks"
   },
-  "license": "MIT",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
-  "packageManager": "pnpm@12.21.0",
-  "private": true,
   "dependencies": {
     "pixi.js": "^8.23.0",
     "vue": "^3.5.46"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@vitejs/plugin-vue": "^6.0.11",
+    "lint-staged": "^17.6.2",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
+    "simple-git-hooks": "^2.14.0",
     "typescript": "~5.9.3",
     "vite": "^8.3.8",
     "vue-tsc": "^3.3.14"
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged",
+    "commit-msg": "pnpm exec commitlint --edit ${1}"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,mts,cts,vue}": [
+      "oxlint --fix",
+      "oxfmt"
+    ],
+    "*.{json,jsonc,html,css,scss,md,yml,yaml,toml}": [
+      "oxfmt"
+    ]
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "packageManager": "pnpm@12.21.0"
 }

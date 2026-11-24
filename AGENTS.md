@@ -3,18 +3,18 @@
 ## 开发与验证
 
 - 本项目是 2D 修仙角色捏脸与换装编辑器，使用 Vite、Vue 3、TypeScript 和 PixiJS。Node.js 与 pnpm 版本以 `package.json` 为准，依赖使用 `pnpm install --frozen-lockfile`。
-- 工作环境提供 RTK 时，Shell 命令使用 `rtk` 前缀。项目命令可用 `rtk proxy pnpm build` 等形式执行。
 - 用 `pnpm dev` 启动编辑器。改动交付前运行 `pnpm build`，覆盖类型检查、素材检查和生产构建。仅检查素材登记时可运行 `pnpm check:assets`。
+- `pnpm install` 会通过 `prepare` 脚本自动安装 git hooks：commit-msg 用 commitlint 校验 Conventional Commits，pre-commit 用 lint-staged 对暂存文件跑 `oxlint --fix` 和 `oxfmt`。提交前可用 `pnpm lint`、`pnpm fmt` 预检，设置 `SKIP_SIMPLE_GIT_HOOKS=1` 可临时跳过 hooks。
 - Python 美术工具位于 `scripts/`，安装方法、命令和写入位置见[素材工具指南](./scripts/README.md)。中间输出使用临时目录，提交保留正式素材、复现输入和有用的验收图。构建产物、依赖目录和缓存由 `.gitignore` 排除。
 
 ## 代码入口
 
-| 内容 | 文件 |
-| --- | --- |
-| 体型、部件、坐标与预设 | [catalog.ts](./src/character/catalog.ts) |
-| 捏脸操作与存档面板 | [App.vue](./src/App.vue) |
+| 内容                    | 文件                                                        |
+| ----------------------- | ----------------------------------------------------------- |
+| 体型、部件、坐标与预设  | [catalog.ts](./src/character/catalog.ts)                    |
+| 捏脸操作与存档面板      | [App.vue](./src/App.vue)                                    |
 | PixiJS 合成、近景和染色 | [CharacterCanvas.vue](./src/components/CharacterCanvas.vue) |
-| 版本化外观码与校验 | [appearanceCode.ts](./src/character/appearanceCode.ts) |
+| 版本化外观码与校验      | [appearanceCode.ts](./src/character/appearanceCode.ts)      |
 
 当前外观码记录体型、九个部位的 ID 和染色。改动素材时保持现有 ID 与原稿格号对应。界面标签可以独立调整。涉及外观码格式的改动须保留已有版本的读取能力，并在浏览器确认保存、刷新、读档及导入。
 
