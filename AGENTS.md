@@ -2,9 +2,10 @@
 
 ## 开发与验证
 
-- 本项目是 2D 修仙角色捏脸与换装编辑器，使用 Vite、Vue 3、TypeScript 和 PixiJS。Node.js 与 pnpm 版本以 `package.json` 为准，依赖使用 `pnpm install --frozen-lockfile`。
+- 本项目是 2D 修仙角色捏脸与换装编辑器，使用 Vite、Vue 3、TypeScript 和 PixiJS。Node.js 版本见 `.nvmrc`，pnpm 版本以 `package.json` 为准，依赖使用 `pnpm install --frozen-lockfile`。
 - 用 `pnpm dev` 启动编辑器。改动交付前运行 `pnpm build`，覆盖类型检查、素材检查和生产构建。运行 `pnpm check:assets` 可检查素材登记并重新生成编辑器和发布包共用的清单。运行 `pnpm pack:assets` 可用 uv 打包运行时素材和接入示例。
 - `pnpm install` 会通过 `prepare` 脚本自动安装 git hooks：commit-msg 用 commitlint 校验 Conventional Commits，pre-commit 用 lint-staged 对暂存文件跑 `oxlint --fix` 和 `oxfmt`。提交前可用 `pnpm lint`、`pnpm fmt` 预检，设置 `SKIP_SIMPLE_GIT_HOOKS=1` 可临时跳过 hooks。
+- 用 `pnpm test` 运行外观码和 ZIP 打包的回归测试。CI 使用 `pnpm install --frozen-lockfile` 和 `uv sync --locked` 安装依赖，再运行代码检查、测试、构建和打包。
 - Python 美术工具位于 `scripts/`，安装方法、命令和写入位置见[素材工具指南](./scripts/README.md)。中间输出使用临时目录，提交保留正式素材、复现输入和有用的验收图。构建产物、依赖目录和缓存由 `.gitignore` 排除。
 
 ## 代码入口

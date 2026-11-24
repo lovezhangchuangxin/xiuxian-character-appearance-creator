@@ -1,6 +1,6 @@
 # 修仙角色外观
 
-使用 Vite、Vue 3、TypeScript 和 PixiJS 的 2D 捏脸与换装样机。浏览器需支持 WebGL。开发环境使用 Node.js 20.19 以上的 20.x 版本或 Node.js 22.12 及以上，以及 `package.json` 声明的 pnpm 版本。
+使用 Vite、Vue 3、TypeScript 和 PixiJS 的 2D 捏脸与换装样机。浏览器需支持 WebGL。开发和 CI 使用 Node.js 24（见 `.nvmrc`），以及 `package.json` 声明的 pnpm 版本。使用 nvm 时可在仓库根目录运行 `nvm use`。
 
 ```sh
 pnpm install --frozen-lockfile
@@ -11,6 +11,8 @@ pnpm build
 `pnpm build` 先检查运行时素材并生成清单，再执行编辑器的类型检查和 Vite 构建。编辑器产物位于 `apps/editor/dist/`。`pnpm check:assets` 可单独检查素材登记，`pnpm preview` 查看构建产物。
 
 提交信息遵循 Conventional Commits，commit-msg 钩子用 commitlint 校验；pre-commit 钩子对暂存文件运行 oxlint 与 oxfmt（Python 美术脚本用 ruff），`pnpm install` 时自动安装。
+
+`pnpm test` 运行旧外观码、素材包版本保护、参考图和缩略图的回归测试。测试和打包需要 uv。GitHub Actions 在推送到 `main` 或打开拉取请求时使用锁定的依赖执行代码检查、回归测试、编辑器构建和 ZIP 校验。
 
 编辑器可保存一个当前浏览器的外观存档。使用「外观码」可复制并导入同一套体型、九个部位编号和布料染色。外观码版本与校验由 [appearanceCode.ts](./apps/editor/src/character/appearanceCode.ts) 定义。
 

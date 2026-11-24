@@ -16,8 +16,9 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "prepare": "simple-git-hooks",
-    "pack:assets": "pnpm check:assets && uv run python scripts/pack-assets.py",
-    "refs:assets": "pnpm check:assets && uv run python scripts/pack-assets.py --refresh-references"
+    "pack:assets": "pnpm check:assets && uv run --locked python scripts/pack-assets.py",
+    "refs:assets": "pnpm check:assets && uv run --locked python scripts/pack-assets.py --refresh-references",
+    "test": "pnpm --filter @xiuxian/editor test && uv run --locked python -m unittest discover -s scripts -p test_pack_assets.py"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
@@ -42,12 +43,12 @@
       "oxfmt"
     ],
     "*.py": [
-      "uv run ruff check --fix",
-      "uv run ruff format"
+      "uv run --locked ruff check --fix",
+      "uv run --locked ruff format"
     ]
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "24.x"
   },
   "packageManager": "pnpm@12.21.0"
 }
